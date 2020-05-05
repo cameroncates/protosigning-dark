@@ -1,0 +1,145 @@
+body {
+    background: rgba(0, 0, 0, 0.95);
+    color: rgba(255, 255, 255, 0.45);
+    font-family: Roboto, "Noto Naskh Arabic UI", Arial, sans-serif !important;
+}
+.border {
+    border: 1px solid rgba(255, 255, 255, 0.075) !important;
+}
+.border-bottom {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.075) !important;
+}
+.border-top {
+    border-top: 1px solid rgba(255, 255, 255, 0.075) !important;
+}
+.border-right {
+    border-right: 1px solid rgba(255, 255, 255, 0.075) !important;
+}
+.btn {
+    color: rgba(255, 255, 255, 0.45);
+}
+.btn:hover{
+    color: white;
+    background: rgba(255, 255, 255, 0.015);
+}
+.btn-success {
+    color: white !important;
+    background-color: #4CAF50 !important;
+}
+.btn-dark {
+    background-color: rgba(255, 255, 255, 0.015) !important;
+    border: transparent !important;
+}
+.box-shadow {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+.text-green {
+    color: #4CAF50;
+}
+.text-dark-2 {
+    color: rgba(255, 255, 255, 0.035);
+}
+.bg-dark {
+  background: rgba(255, 255, 255, 0.015) !important; 
+}
+.bg-dark-2 {
+    background: #0D0D0D !important;
+}
+.bg-none {
+    background: transparent !important;
+}
+.ls-1 {
+    letter-spacing: 0.5px;
+}
+.ls-2 {
+    letter-spacing: 1px;
+}
+.bd-round {
+    border-radius: 50px 50px 50px 50px !important;
+}
+.bd-round-r {
+    border-radius: 0px 50px 50px 0px !important;
+}
+.bd-round-l {
+    border-radius: 50px 0px 0px 50px !important;
+}
+.bd-0 {
+    border: transparent !important;
+}
+.btn-dark-special {
+    color: #4CAF50 !important;
+    background-color: rgba(255, 255, 255, 0.015) !important;
+    transition: 0.3s;
+}
+.btn-dark-special:hover {
+    background-color: rgba(255, 255, 255, 0.055) !important;
+}
+.p-absolute {
+    position: absolute !important;
+}
+.p-relative {
+    position: relative !important;
+}
+.bg-dark-overlay {
+    background-color: rgba(0,0,0,0.55);
+}
+.opacity-0 {
+    opacity: 0;
+}
+.opacity-1 {
+    opacity: 1;
+}
+.bd-radius-12 {
+    border-radius: 12px !important;
+}
+.transition-3 {
+    transition: 0.3s;
+}
+.v-hidden {
+    visibility: hidden;
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.035); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.035);
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.135);
+  }
+  
+  .animation-demo {
+      animation: drop-down 1s linear;
+  }
+  @keyframes drop-down {
+      0% {
+          max-height: 0px;
+      }
+      100% {
+          max-height: 500px;
+      }
+  }
+.preview-box {      
+    animation-name: example;
+    animation-duration:  1.125s;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes example {
+    0% {background-color: #0f0f0f;}
+    25% {background-color: #111111;}
+    50% {background-color: #0f0f0f;}
+    75% {background-color: #0f0f0f;}
+    100% {background-color: #0f0f0f;}
+}
