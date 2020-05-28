@@ -32,7 +32,8 @@ export default {
   */
   css: [
     '~assets/css/bootstrap-ext.css',
-    '~assets/css/animate-css.css'
+    '~assets/css/animate-css.css',
+    '~assets/icon/style.css'
   ],
   /*
   ** Plugins to load before mounting the App

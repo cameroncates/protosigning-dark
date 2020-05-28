@@ -92,8 +92,11 @@ export default {
             this.$store.dispatch("user/get_test")
         },
         $new() {            
-            let createNew = this.$component(createNew_component)
-            $(document.body).prepend(createNew)
+            let { html, instance } = this.$component(createNew_component)
+            $(document.body).prepend(html)
+            instance.$on('$goto', (url) => {
+                this.$router.push(url)
+            })
         },
         $init() {
             let $this = this
@@ -110,14 +113,18 @@ export default {
             this.widths.content_area = $(window).width() - this.widths.left_nav
         },
         $component(component, props = null) {
-        let ComponentClass = vue.extend(component)
-        let instance = new ComponentClass({ propsData: props })
-        instance.$mount()
-        return instance.$el
+            let ComponentClass = vue.extend(component)
+            let instance = new ComponentClass({ propsData: props })
+            instance.$mount()
+            return {
+                html: instance.$el,
+                instance
+            }
         },
     },
     mounted() {
         this.$init()
+        this.$new()
         $(window).resize(() => this.$def_w_h())
     }
 

@@ -3,18 +3,29 @@ import { auth, db, storage } from '@/services/firebase'
 
 Vue.mixin({
     methods:{
-        async $api_fetch(ref, callback){
-            await db.ref(ref).once('value')
-            .then((data) =>
-            {
-                const obj = data.val()
-                let records = []
-                for(let key in obj) {
-                    records.push({...obj[key], key})
-                }
-                callback(records)
+        async $api_fetch2(ref, limit = 50, callback){
+            let db_ref = db.ref(ref)
+            await db_ref.orderByKey().limitToFirst(limit).on("child_added", (snap) => {
+                console.log(snap.key)
+                callback({ ...snap.val(), key: snap.key } )
             })
-            .catch((error) =>{ console.log(error) })
-    },
+        },
+        async $api_fetch(ref, callback){
+            let db_ref = db.ref(ref)
+            await db_ref.on("child_added", (snap) => {
+                let obj = snap.val(),
+                    data = []
+                for(let key in obj) {
+                    data.push({...obj[key], key})
+                }
+                callback(data, snap.key)
+            })
+        },
+        async $api_fetch_more(ref, { anchor_key, limit }, callback){
+            let db_ref = db.ref(ref)
+            await db_ref.orderByKey().startAt(anchor_key).limitToFirst(limit).on("child_added", (snap) => {
+                callback({ ...snap.val(), key: snap.key } )
+            })
+        },
     }
 })

@@ -7,14 +7,20 @@
     <div class="custom-file m-5">
         <input type="file" class="custom-file-input" id="customFile" ref="upload">
         <label class="custom-file-label" for="customFile">Choose Image</label>
-        <input type="text" class="mt-3 w-100 bg-dark p-3 bd-round border text-white" placeholder="File Title" v-model="title">
+        <input type="text" class="mt-3 w-100 bg-dark p-3 bd-round border" placeholder="File Title" v-model="title">
         <select v-model="category" class="custom-select">
+            <option v-for="(item, i) in elements" :key="i" :value="item['value']">
+                {{item['title']}}
+            </option>
             <option value="poster" selected>Poster</option>
             <option value="facebookPost">facebook Post</option>
             <option value="card">Card</option>
         </select>        
-        <input type="text" class="mt-3 w-100 bg-dark p-3 bd-round border text-white" placeholder="Category" v-model="sub_category">
+        <input type="text" class="mt-3 w-100 bg-dark p-3 bd-round border" placeholder="Category" v-model="sub_category">
         <button @click="insertIntoStorage()" class="btn btn-block btn-success p-3 bd-round border mt-3">Upload</button>
+        <button @click="generateUUID()" class="btn btn-block btn-success p-3 bd-round border mt-3">Generate UUID</button>
+
+        <p>{{uid}}</p>
     </div> 
   </div>
 </template>
@@ -25,6 +31,25 @@ import {v4 as uuid} from 'uuid'
 export default {
     data() {
         return {
+            uid: null,
+            elements: [
+                { value: "basic", title: "Basic"},
+                { value: "graphical", title: "Graphical"},
+                { value: "food", title: "Food"},
+                { value: "socialMedia", title: "Social Media"},
+                { value: "pieChart", title: "Pie Chart"},
+                { value: "objects", title: "Objects"},
+                { value: "symbols", title: "Symbols"},
+                { value: "arrows", title: "Arrows"},
+                { value: "flowchart", title: "Flowchart"},
+                { value: "animals", title: "Animals"},
+                { value: "cardsAndChess", title: "Cards & Chess"},
+                { value: "dialogBallons", title: "Dialog ballons"},
+                { value: "electronics", title: "Electronics"},
+                { value: "mathematical", title: "Mathematical"},
+                { value: "music", title: "Music"},
+                { value: "miscellaneous", title: "Miscellaneous"},
+            ],
             title: "My Title",
             category: "",
             src: null,
@@ -42,15 +67,18 @@ export default {
         }
     },
     methods: {
+        generateUUID() {
+            this.uid = uuid()
+        },
         insertIntoStorage() {
             try {
                 let $this = this
                 $this._uuid = uuid()
 
-                storage.ref("designs/"+$this.category +"/"+$this._uuid + "/img"+$this.img_extension).put($this.img_file).then(function(snapshot) {
+                storage.ref("elements/"+$this.category +"/"+$this._uuid + "/img"+$this.img_extension).put($this.img_file).then(function(snapshot) {
                     snapshot.ref.getDownloadURL().then(url => {
                         $this.img_url = url
-                        storage.ref("designs/"+$this.category +"/"+$this._uuid+ "/source"+$this.text_extention).put($this.text_file).then(function(snapshot) {
+                        storage.ref("elements/"+$this.category +"/"+$this._uuid+ "/source"+$this.text_extention).put($this.text_file).then(function(snapshot) {
                             snapshot.ref.getDownloadURL().then(url2 => {
                                 $this.file_url = url2
                                 $this.insertIntoDatabase()
@@ -65,13 +93,14 @@ export default {
         insertIntoDatabase() {
             try {
                 let $this = this
-                db.ref("designs/"+this.category).push({
+                db.ref("elements/"+this.category).push({
                     width: this.width,
                     height: this.height,
                     title: this.title,
                     category: this.sub_category,
                     img_url: this.img_url,
-                    file_url: this.file_url
+                    file_url: this.file_url,
+                    date: $datetime()
                 })
                 .then((record) => {
                     $this.key = record.key
@@ -119,7 +148,6 @@ export default {
             }       
 
         }
-        
     },
     mounted() {
         let $this = this

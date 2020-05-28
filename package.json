@@ -10,14 +10,17 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "heroku-postbuild": "npm run build"
-
   },
   "dependencies": {
+    "@svgdotjs/svg.draggable.js": "^3.0.2",
+    "@svgdotjs/svg.js": "^3.0.16",
+    "canvg": "^3.0.6",
     "cookieparser": "^0.1.0",
     "firebase": "^7.14.2",
     "js-cookie": "^2.2.1",
     "jwt-decode": "^2.2.0",
     "nuxt": "^2.0.0",
+    "svg.draggable.js": "^3.0.0",
     "uuid": "^8.0.0"
   },
   "devDependencies": {}
