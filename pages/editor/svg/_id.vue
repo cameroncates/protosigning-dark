@@ -15,7 +15,7 @@
                     <div class="d-flex" :class="nested[0]['heading'] ? 'mt-4 mb-2' : 'mb-3 justify-content-between'">
                         <div v-for="(item, i) in nested" :key="i">
                             <w-range v-if="item['range']" :title="item['text']" :dropdown="item['dropdown']" />
-                            <w-dropdown v-else-if="item['dropdown']" :title="item['text']" :w="item['w']" :selected="item['selected']" />
+                            <w-dropdown v-else-if="item['dropdown']" :title="item['text']" :w="item['w']" :selected="item['selected']" :list="item['list']" @item_selected="$dropdown_ev" />
                             <w-toggle v-else-if="item['toggle']" :title="item['text']" />
                             <w-inputValue v-else-if="item['input']" :title="item['text']"  :width="item['width']" :icon="item['icon']" />     
                             <div v-else-if="item['button']">
@@ -35,13 +35,10 @@
         <!-- TOP -->
         <div class="d-flex justify-content-between" ref="top">
             <div></div>
-            <div class="hov-elem">
-                <div>
-                    <button class="btn material-icons">chevron_left</button>
-                    <button class="btn no-btn border bd-2 pl-3 pr-3 pt-1 pb-1 bg-white">1 / 5</button>
-                    <button class="btn material-icons">chevron_right</button>
-                </div>
-                <button class="btn btn-block p-0 text-sm text-center hov-tg scale-0">&#9207;</button>
+            <div>
+                <button class="btn material-icons">chevron_left</button>
+                <button class="btn no-btn border bd-2 pl-3 pr-3 pt-1 pb-1 bg-white">1 / 5</button>
+                <button class="btn material-icons">chevron_right</button>
             </div>
             <div class="d-flex">
                 <button class="btn d-flex"><span class="material-icons">group_add</span> <span class="text-danger font-weight-bold text-sm">(9+)</span></button>
@@ -49,14 +46,24 @@
             </div>
         </div>
         <!-- WORKAREA -->
-        <div class="p-2 transition-3 border" ref="workarea" :style="{height: workarea['h'] + 'px'}">
-            <div id="svg-container" class="w-100 h-100 overflow-auto d-flex align-items-center justify-content-center">
+        <div class="p-2 transition-3 w-100 d-flex align-items-center justify-content-center overflow-auto" ref="workarea" :style="{height: workarea['h'] + 'px'}">
+            <div id="svg-container" :style="{width: canvas.w + 'px', height: canvas.h + 'px'}" class="border bd-2 p-relative hov-elem" @mouseleave="canvas.props.show = false">
+                <!-- PROPS -->
+                <div class="p-absolute text-right hov-tg scale-0" style="right:-16px;top:-16px">
+                    <button @click="canvas.props.show = !canvas.props.show" class="btn text-white p-1 box-shadow bd-round material-icons transition-3" :class="canvas.props.show ? 'rotate-45 bg-danger' : 'rotate-0 bg-primary'">{{canvas.props.show ? 'add': 'more_vert'}}</button>
+                    <div class="bg-white mt-2 box-shadow p-2 animated fadeIn faster" v-if="canvas.props.show">
+                        <button @click="$canvas(item['icon'])" class="btn btn-block text-dark text-left" v-for="(item, i) in canvas.props.list" :key="i" :class="item.break ? 'bd-bottom p-0' : 'p-2'">
+                            <span v-if="!item.break">
+                                <span class="mr-4" :class="'icon-'+item['icon']"></span>
+                                <span>{{item.title}}</span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
                 <svg 
-                    id="svg" ref="svg" 
-                    class="flex-shrink-0 transition-3 border bd-2" 
-                    :width="canvas.w" :height="canvas.h" 
-                    overflow="visible" 
-                    xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    id="svg" ref="svg"
+                    width="100%" height="100%"
+                    overflow="visible" version="1.1">
                     <rect id="canvas-bg" width="100%" height="100%" fill="#ffffff" x="0" y="0" stroke-width='2'></rect>
                 </svg>
             </div>
@@ -86,7 +93,7 @@
     <!-- ADD -->
     <div class="p-absolute" style="right:25px;bottom:25px">
         <div class="bg-white box-shadow bd-round animated zoomIn faster" v-if="add.show">
-            <button v-for="(item, i) in add.list" :key="i" :class="'icon-'+item['icon']" class="btn btn-block text-lg p-3 bd-round">
+            <button @click="$add(item.value)" v-for="(item, i) in add.list" :key="i" :class="'icon-'+item['icon']" class="btn btn-block text-lg p-3 bd-round">
                 <span class="text-lg" v-for="(sub, j) in item['paths']" :key="j" :class="sub"></span>
             </button>
         </div>
@@ -100,22 +107,22 @@
     </button>
 
     <!-- CANVAS RESOLUTION -->
-    <div ref="resolution" class="p-absolute">
-        <input type="text" style="width:45px" class="bg-none bd-0 text-center font-weight-bold text-primary" v-model="canvas.w">
-        x
-        <input type="text" style="width:45px" class="bg-none bd-0 text-center font-weight-bold text-primary" v-model="canvas.h">
-    </div>
+    <!-- <div ref="resolution" class="p-absolute">
+        <input type="text" style="width:30px" class="bg-none bd-0 text-sm text-center text-primary" v-model="canvas.w">
+        <span class="text-sm font-weight-bold">x</span>
+        <input type="text" style="width:30px" class="bg-none bd-0 text-sm text-center text-primary" v-model="canvas.h">
+    </div> -->
     <!-- CANVAS FULL-SCREEN -->
-    <button ref="full-screen" class="btn p-2 p-absolute text-lg bd-round icon-full-screen"></button>
+    <!-- <button ref="full-screen" class="btn p-2 p-absolute text-lg bd-round icon-full-screen"></button> -->
     <!-- CANVAS PROS -->
-    <div ref="canvas-props" class="transition-3 p-absolute">
+    <!-- <div ref="canvas-props" class="transition-3 p-absolute">
         <button @click="$canvas(item['icon'])" class="btn btn-block p-2 bd-round text-dark" :class="'icon-'+item['icon']" v-for="(item, i) in canvas.props.list" :key="i"></button>
-    </div>
+    </div> -->
     <!-- CANVAS CUSTOMIZATIONS -->
-    <div ref="canvas-customizations" class="transition-3 p-absolute">
+    <!-- <div ref="canvas-customizations" class="transition-3 p-absolute">
         <button class="btn btn-block text-dark bd-round p-2" :class="'icon-'+item['icon']" v-for="(item, i) in canvas.customizations.list" :key="i"></button>
-    </div>
-    <!-- <canvas width="1000" height="1000" class="border p-absolute"></canvas> -->
+    </div> -->
+    <canvas width="1000" height="1000" class="border p-absolute d-none"></canvas>
 </div>
 </template>
 
@@ -133,6 +140,7 @@ import c_draw from '@/components/editor-draw.vue'
 import c_zoom_overlay from '@/components/editor-zoom-overlay.vue'
 import c_templates from '@/components/editor-templates.vue'
 import c_layers from '@/components/editor-layers.vue'
+import c_code from '@/components/editor-code.vue'
 import { SVG } from '@svgdotjs/svg.js'
 
 import JSON_editor from '@/assets/json/editor.json'
@@ -150,7 +158,8 @@ export default {
         "w-dropdown": w_dropdown,
         w_popup_v,
         c_draw,
-        c_templates
+        c_templates,
+        c_code
     },
     data() {
         return {
@@ -158,7 +167,7 @@ export default {
             loading: { $: false, msg: ""},
             window: { w: 0, h: 0},
             root: { node: null, w: 0, h: 0, },
-            left: { node: null, w: 360, h: 0, data: null, "Text": false, "Size & Rotation": false, "Alignment":false, "Shape": false  },
+            left: { node: null, w: 360, h: 0, data: null, "Text": true, "Size & Rotation": false, "Alignment":false, "Shape": false  },
             right: { node: null, w: 0, h: 0, list: [] },
             top: { node: null, w:0, h: 38 },
             workarea: { node: null, w:0, h:0 },
@@ -166,7 +175,7 @@ export default {
             draw: { $: null, array: [], hasPlots: false, template: null , type: "select", C: null },
             textarea: {node: null, resize: null, fontsize: 50, x: 0, y:0, w:100,h:100},
             control: { type: { "1": null, "2": null, "3": null, "4": null }, cursor: null  }, // 4: RESIZERS, 1: STRECHNESS, 3: END-POINT 2:PATH-TO
-            canvas: { node: null, $: null, props: { node:null, list: [] }, customizations: { node:null, list: [] }, w: 800, h: 800, rect: { x:110, y:0 }, resolution: null, full_screen: null },
+            canvas: { node: null, $: null, props: { node:null, list: [], show: false }, customizations: { node:null, list: [] }, w: 800, h: 800, rect: { x:110, y:0 }, resolution: null, full_screen: null },
             ev: { mousedown: false },
             coords: {
                 down: {x: 0, y: 0}
@@ -182,24 +191,39 @@ export default {
         }
     },
     methods: {
+        $dropdown_ev(payload) {
+            switch(payload.type) {
+                case "Font-Family":
+                    this.draw.$.font("family", payload.style.fontFamily)
+                    break
+                case "Size":
+                    this.draw.$.font("size", payload.style.size)
+                    break
+            }
+        },
         async $save() {
             const canvas = document.querySelector('canvas');
             const ctx = canvas.getContext('2d');            
-            v = await Canvg.from(ctx, $("#svg-container").html());
+            v = await Canvg.from(ctx, $("#svg-container > svg")[0].outerHTML);
+            $(canvas).removeClass("d-none")
             v.start();
             
         },
         $canvas(p) {
             switch(p) {
                 case "download":
+                    this.$save()
+                    break
+                case "code":
+                    let { html, instance } = this.$component(c_code, { code: this.canvas.node[0].outerHTML})
+                    $(document.body).prepend(html)
                     break
             }
-            console.log(p)
         },
         $templates() {
             let { html, instance } = this.$component(c_templates, { w: this.left['w'] })
             instance.$on("$select", (payload) => {
-                this.loading.msg = "Waiting for the file to be ready"
+                this.loading.msg = "Please wait while the file is ready"
                 this.loading.$ = true
                 if(payload.type == "elements") {
                     let file = payload['file_url']
@@ -209,8 +233,8 @@ export default {
                             // this.draw.type = "select"
                             // this.draw.$.addTo(this.canvas.$.node)
                             this.canvas.$.add($(data)[0])
-                            this.loading.msg = "File is ready to use"
-                            setTimeout(() => this.loading.$ = false , 1000);
+                            this.loading.msg = ""
+                            this.loading.$ = false
                         })                        
                     }, 500);
                 }
@@ -234,9 +258,17 @@ export default {
                 $(document.body).prepend(html)
             }
         },
-        $add(e) {
-            let { html, instance } = this.$component(w_popup_v, { e, list: JSON_editor['add'] })
-            $(document.body).prepend(html)
+        $add(item) {
+            let $this = this
+            switch(item) {
+                case "image":
+                    $uploadFile((img) => {
+                        this.draw.$ = this.canvas.$.image(img).size(this.canvas.w/2, this.canvas.h/2)
+                    })
+                    break
+                case "page":
+                    break
+            }
         },
         $init() {
             this.root.node = $(this.$refs['root'])
@@ -585,6 +617,7 @@ export default {
                     case "line":
                     case "circle":
                     case "ellipse":
+                    case "image":
                         this.components[c_ID].width.$w = this.components[c_ID].width.w + x2
                         this.components[c_ID].height.$h = this.components[c_ID].height.h + y2
                         this.components[c_ID].x.$x = this.components[c_ID].x.x + x2
@@ -651,7 +684,7 @@ export default {
             this.control.cursor = null         
             // !this.draw.hasPlots && this.draw.type !== "textarea" ? this.draw.type = "select" : ""
             // this.draw.$ ? this.$resizers(this.draw.$.node) : ""
-            if(this.draw.$) {
+            if(this.draw.$ && this.components[c_ID]) {
                 this.components[c_ID].scale.x = this.components[c_ID].scale.$x
                 this.components[c_ID].scale.y = this.components[c_ID].scale.$y
                 this.components[c_ID].translate.x = this.components[c_ID].translate.$x
@@ -714,7 +747,12 @@ export default {
         },    
         // RESIZERS
         $resizers(elem) {
-            if($(elem).attr("id") == "canvas-bg" || $(elem.parentNode).attr("type") == "controls") return
+            if($(elem.parentNode).attr("type") == "controls") return
+            if($(elem).attr("id") == "canvas-bg") {
+                if(this.control["4"]) 
+                    this.control["4"].remove()                
+                return
+            }
             elem.tagName == "tspan" ? elem = elem.parentNode : ""
 
             this.DOMRect.component = elem.getBoundingClientRect()

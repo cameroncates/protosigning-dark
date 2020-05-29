@@ -127,8 +127,43 @@
                 { "text": "Font", "heading": true}
             ],
             "6": [
-                { "dropdown": true, "w": 75, "selected": "10", "text": "Size", "icon": "capitalize"},
-                { "dropdown": true, "w": 225, "selected": "Arial", "text": "Font-Family", "icon": "capitalize"}
+                { "dropdown": true, "w": 75, "selected": "10", "text": "Size", "icon": "capitalize", "list": [
+                    { "title": 4, "style": { "size": 4} },
+                    { "title": 6, "style": { "size": 6} },
+                    { "title": 8, "style": { "size": 8} },
+                    { "title": 9, "style": { "size": 9} },
+                    { "title": 10, "style": { "size": 10} },
+                    { "title": 11, "style": { "size": 11} },
+                    { "title": 13, "style": { "size": 13} },
+                    { "title": 15, "style": { "size": 15} },
+                    { "title": 16, "style": { "size": 16} },
+                    { "title": 20, "style": { "size": 20} },
+                    { "title": 22, "style": { "size": 22} },
+                    { "title": 25, "style": { "size": 25} },
+                    { "title": 30, "style": { "size": 30} }
+                ]},
+                { "dropdown": true, "w": 225, "selected": "Open Sans Condensed", "text": "Font-Family", "icon": "capitalize", "list": [
+                    { "title": "Roboto Mono", "style": { "fontFamily": "'Roboto Mono', monospace"}},
+                    { "title": "Open Sans Condensed", "style": { "fontFamily": "'Open Sans Condensed', sans-serif"}},
+                    { "title": "Tenali Ramakrishna", "style": { "fontFamily": "'Tenali Ramakrishna', sans-serif"}},
+                    { "title": "Source Code Pro", "style": { "fontFamily": "Source Code Pro, monospace"}},
+                    { "title": "Piedra", "style": { "fontFamily": "'Piedra', cursive"}},
+                    { "title": "'Anton', sans-serif", "style": { "fontFamily": "'Anton', sans-serif"}},
+                    { "title": "'Dancing Script', cursive", "style": { "fontFamily": "'Dancing Script', cursive"}},
+                    { "title": "'Lobster', cursive", "style": { "fontFamily": "'Lobster', cursive"}},
+                    { "title": "'Indie Flower', cursive", "style": { "fontFamily": "'Indie Flower', cursive"}},
+                    { "title": "'Pacifico', cursive", "style": { "fontFamily": "'Pacifico', cursive"}},
+                    { "title": "'Bangers', cursive", "style": { "fontFamily": "'Bangers', cursive"}},
+                    { "title": "'Abril Fatface', cursive", "style": { "fontFamily": "'Abril Fatface', cursive"}},
+                    { "title": "'Architects Daughter', cursive", "style": { "fontFamily": "'Architects Daughter', cursive"}},
+                    
+                    { "title": "'Permanent Marker', cursive", "style": { "fontFamily": "'Permanent Marker', cursive"}},
+                    { "title": "'Fredoka One', cursive", "style": { "fontFamily": "'Fredoka One', cursive"}},
+                    { "title": "'Caveat', cursive", "style": { "fontFamily": "'Caveat', cursive"}},
+                    { "title": "'Satisfy', cursive", "style": { "fontFamily": "'Satisfy', cursive"}},
+                    { "title": "'Alfa Slab One', cursive", "style": { "fontFamily": "'Alfa Slab One', cursive"}},
+                    { "title": "'Kalam', cursive", "style": { "fontFamily": "'Kalam', cursive"}}
+                ]}
             ],
             "7": [
                 { "text": "Text Fitting", "heading": true}
@@ -149,21 +184,28 @@
         { "class": "zoom-in"}
     ],
     "add": [
-        { "icon": "chart", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8", "path9"]},
-        { "icon": "pie-chart", "paths": ["path1", "path2", "path3", "path4", "path5", "path6"]},
-        { "icon": "graphical-shapes", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8"]},
-        { "icon": "image", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8"]},
-        { "icon": "add-page", "paths": ["path1", "path2", "path3", "path4", "path5", "path6"] }
+        { "icon": "chart", "value": "chart", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8", "path9"]},
+        { "icon": "pie-chart","value": "piechart", "paths": ["path1", "path2", "path3", "path4", "path5", "path6"]},
+        { "icon": "graphical-shapes","value": "shapes", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8"]},
+        { "icon": "image","value": "image", "paths": ["path1", "path2", "path3", "path4", "path5", "path6", "path7", "path8"]},
+        { "icon": "add-page","value": "page", "paths": ["path1", "path2", "path3", "path4", "path5", "path6"] }
     ],
     "right": [
         { "icon": "layers", "paths": 6 }
     ],
     "canvas": {
         "props": [
-            { "icon": "copy" },
-            { "icon": "delete" },
-            { "icon": "download" },
-            { "icon": "code" }
+            { "icon": "copy", "title": "Duplicate" },
+            { "icon": "delete", "title": "Delete/Clear" },
+            { "icon": "download", "title": "Download" },
+            { "icon": "library", "title": "Save to DB" },
+            { "icon": "code", "title": "SVG Code" },
+            { "break": true},
+            { "icon": "grid" , "title": "Show/Hide Grid"},
+            { "icon": "background", "title": "Canvas Background" },
+            { "icon": "wireframe", "title": "Wireframe View" },
+            { "break": true},
+            { "icon": "full-screen", "title": "Enter Full Screen" }
         ],
         "customizations": [
             { "icon": "grid" },

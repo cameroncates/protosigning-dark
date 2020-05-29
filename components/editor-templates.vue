@@ -18,7 +18,7 @@
         </button>
         <div class="d-flex flex-wrap justify-content-center">
             <div @click="$select(nested)" class="hov-bd-blue p-3 m-2 bg-light-2" v-for="(nested, i, j) in obj['data'].slice(0, obj.slice)" :key="j" :class="nested['key'] == select ? 'border-blue' : ''">
-                <img :src="nested['img_url']" width="30" alt="" @load="$loaded($event)">
+                <img :src="nested['img_url']" width="28" alt="" @load="$loaded($event)">
             </div>
             <button v-if="data[active][key]['data'].length > data[active][key]['slice']" @click="data[active][key]['slice'] += 24" class="btn btn-block font-weight-bold p-0 material-icons text-md">expand_more</button>
         </div>

@@ -1,14 +1,14 @@
 <template>
-    <div class="p-absolute border animated fadeInUp faster" ref="parent-container" id="parent-container">
+    <div class="p-absolute bg-white box-shadow animated fadeInUp faster" ref="parent-container" id="parent-container">
         <!-- CLOSE BTN -->
-        <div class="row m-0 mb-4 justify-content-center" ref="close-btn-container">
+        <div class="row m-0 mb-2 justify-content-center" ref="close-btn-container">
             <button @click="$close()" class="btn font-weight-bold bd-round material-icons">expand_more</button>
         </div>
         <!-- CLOSE BTN -->
         
         <div class="row m-0" :style="{height: height.container + 'px'}">
-            <div class="p-3 border-rights align-self-center" style="width:300px">
-                <button @click="tab = $switch_tab(i)" v-for="(item, i) in tabs" :key="i+0.1" :class="tab==i ? class_.tab : ''" class="btn btn-block p-3 text-left bd-round-r d-flex">
+            <div class="pr-4 border-rights align-self-center" style="width:300px">
+                <button @click="tab = $switch_tab(item.value)" v-for="(item, i) in tabs" :key="i+0.1" :class="tab==item.value ? class_.tab : ''" class="btn btn-block p-3 text-left bd-round-r d-flex">
                     <span class="material-icons ml-2 mr-3">{{item.icon}}</span><span>{{item.title}}</span>
                 </button>
             </div>
@@ -16,71 +16,37 @@
 
             <div class="p-3 overflow-auto" :style="{width: width.content_area+ 'px', height: height.container + 'px'}">
                 <!-- SEARCH -->
-                <div class="w-100 text-center input-group mb-4">
-                    <input type="text" :class="keywords.length <= 0 ? 'bd-round-r' : ''" class="bd-round-l form-control bg-dark p-3 pl-4 bd-0 text-white ls-1 h-100" style="min-width:200px" placeholder="Search for Prototypes" v-model="keywords">
-                    <div class="input-group-prepend">
-                        <button @click="keywords=''" class="btn btn-dark  material-icons bd-round-r text-white">
-                            <span v-if="keywords.length > 0" class="animated fadeIn faster">clear</span>
-                            <span v-else class="animated fadeInUp faster">search</span>
+                <div class="w-100 text-center input-group bd-round">
+                    <input type="text" class="bd-round box-shadow bd-0 form-control bg-light p-4 mr-2 align-self-center" style="min-width:200px" placeholder="Search for Prototypes" v-model="keywords">
+                    <div class="input-group-prepend align-items-center bd-round bg-light box-shadow pl-2">
+                        <button v-for="(item, i) in (selected.search_by)" :key="i" class="btn no-btn animated fadeInRight faster text-small">
+                            <span class="mr-2">{{item.title}}</span> &#9207;
                         </button>
-                        <button v-for="(item, i) in (selected.search_by)" :key="i" class="btn btn-dark ml-2 bd-round d-flex pl-3 pr-3 animated fadeInRight faster">
-                            <span class="align-self-center mr-3">{{item.title}}</span> 
-                            <span class="align-self-center material-icons">arrow_drop_down</span>
-                        </button>
-                        <button class="btn btn-dark ml-2 bd-round d-flex pl-3 pr-3 animated fadeInRight faster" v-if="tab==1">
-                            <span class="align-self-center mr-3">Color</span> <span class="align-self-center round-md"></span>
+                        <button class="btn ml-2 d-flex animated fadeInRight faster text-small" v-if="tab=='logos'">
+                            <span class="align-self-center mr-2">Color</span><span class="round-md"></span>
                         </button>
                     </div>
                 </div>
                 <!-- SEARCH -->
                 <!-- SEARCH TAGS -->
-                <div class="row m-0">
-                    <button v-for="(item, i) in serach_tags" :key="i+0.2" class="btn btn-dark-special pl-3 mr-2 pr-1 bd-round d-flex" @click="$remove_keyword($event)">
-                        <span class="mr-2 align-self-center">{{item.title}}</span>
-                        <span class="material-icons">cancel</span>
+                <div class="row m-0 mt-3">
+                    <button v-for="(item, i) in serach_tags" :key="i+0.2" class="btn btn-primary text-sm mr-2 bd-round d-flex box-shadow" @click="$remove_keyword($event)">
+                        {{item.title}}
                     </button>
                 </div>
                 <!-- SEARCH TAGS -->
 
-                <div v-for="(obj, key) in (selected.content)" :key="key" class="">
-                    <div class="mt-5 row">
-                        <h4 class="p-1 mr-2 text-white">{{key.charAt(0).toUpperCase() + key.slice(1)}}</h4>
-                        <span v-if="obj.length <=1" class="spinner-border text-success spinner-border-sm align-self-center"></span>
-                    </div>
-                    <div class="p-relative" v-if="obj.length > 0">
-                        <button @click="$scrollRight($event)" class="btn material-icons horizontal-scroll-btn  p-absolute">chevron_left</button>
-                        <button @click="$scrollLeft($event)" class="btn material-icons horizontal-scroll-btn p-absolute" style="right:0px;">chevron_right</button>
-                        <div class="d-flex overflow-hidden scroll-content ml-4 mr-4">
-                            <!-- WHOLE CARD -->
-                            <div v-for="(item, k) in obj" :key="k" class="m-4 hover-effect-1" :class="k==0 && item.title == 'Blank' ? 'align-self-center' : 'align-self-end'">
-                                <!-- IMAGE CARD -->
-                                <div class="p-relative d-flex border overflow-hidden bd-radius-12" :class="k!=0 && item.title != 'Blank' ? 'preview-box bg-dark' : '' " :style="{width: 300+'px', minHeight: 250+'px'}">
-                                    <!-- BLANK PROJECT CARD -->
-                                    <div class="text-center p-2 align-self-center col-md-12" v-if="item.title == 'Blank'">
-                                        <div class="w-100">
-                                            <button @click="$open('blank', 1)" class="btn horizontal-scroll-btn material-icons">add</button>
-                                        </div>
-                                        <p class="small mt-3">Blank {{key.charAt(0).toUpperCase() + key.slice(1) }}</p>
-                                    </div>
-                                    <!-- BLANK PROJECT CARD -->
-                                    <!-- DARK-OVERLAY -->
-                                    <div class="p-0 w-100 p-absolute h-100 text-right hover-effect-1-overlay d-none">
-                                        <button class="btn text-white material-icons opacity-0 m-2 p-0">more_vert</button>
-                                    </div>
-                                    <!-- DARK-OVERLAY -->
-                                    <img @load="$img_loaded($event)" :src="item.img_url" alt="" width="100%" class="v-hidden">
-                                </div>
-                                <!-- IMAGE CARD -->
-                                <p class="font-weight-bold text-white m-0 mt-2 ml-2 ls-1" v-if="item.title != 'Blank'">{{item.title}}</p>
-                                <!-- <p class="m-0 ml-2 ls-1 small">Created 12th May 1998</p> -->
-                            </div>
-                            <!-- WHOLE CARD -->
-                        </div>
-                    </div>
-                    <div v-else class="w-100 text-center">
-                        <button class="btn btn-dark"></button>
+            <div class="mt-5" v-for="(obj, key) in data[tab]" :key="key" :class="obj['data'].length == 0 ? 'd-none': ''">
+                <h4>{{obj.title}}</h4>
+                <div class="d-flex">
+                    <div v-for="(nested, i, j) in obj['data'].slice(0, obj.slice)" :key="j" class="mr-5 bg-light box-shadow">
+                        <img @load="$img_loaded($event)" :src="nested.img_url" alt="" width="300px">
+                        <p class="text-small p-2">{{nested.title}}</p>
                     </div>
                 </div>
+                <button v-if="data[tab][key]['data'].length > data[tab][key]['slice']" @click="data[tab][key]['slice'] += 24" class="btn btn-block border material-icons">expand_more</button>
+            </div>
+
 
             </div>
         </div>
@@ -106,15 +72,15 @@ export default {
     },
     data() {
         return {
-            tab: 2,
+            tab: "designs",
             keywords: "",
             tabs: [
-                { icon: "home", title: "Prototypes"},
-                { icon: "ac_unit", title: "Logos"},
-                { icon: "home", title: "Design & Art"},
+                { icon: "home", title: "Prototypes", value: "prototypes"},
+                { icon: "ac_unit", title: "Logos", value: "logos"},
+                { icon: "home", title: "Design & Art", value: "designs"},
             ],
             class_: {
-                tab: 'font-weight-bold text-success animated fadeIn'
+                tab: 'font-weight-bold btn-primary animated fadeIn box-shadow'
             },
             selected: {
                 search_by: null,
@@ -145,14 +111,28 @@ export default {
             width: {
                 content_area: 200
             },
-            designs: {
-                poster: [
-                    { title: "Blank", img_url: null}
-                ],
-                facebookPost: []
-            },
-            prototypes: {},
-            logos: {}
+            data: {
+                designs: {
+                    poster: { title: "Poster", data: [], slice: 8 },
+                    facebookPost: { title: "Facebook Post", data: [], slice: 8 },
+                    socialMedia: { title: "Social Media", data: [], slice: 8 },
+                    food: { title: "Food", data: [], slice:8 },
+                    objects: { title: "Objects", data: [], slice: 8 },
+                    symbols: { title: "Symbols", data: [], slice: 8 },
+                    pieChart: { title: "Pie Chart",data: [], slice: 8 },
+                    arrows: { title: "Arrows", data: [], slice: 8 },
+                    flowchart: { title: "Flowchart", data: [], slice: 8 },
+                    animals: { title: "Animals", data: [], slice: 8 },
+                    cardsAndChess: { title: "Cards & Chess", data: [], slice: 8 },
+                    dialogBallons: { title: "Dialog Ballons", data: [], slice: 8 },
+                    electronics: { title: "Electronics", data: [], slice: 8 },
+                    mathematical: { title: "Mathematical", data: [], slice: 8 },
+                    music: { title: "Music", data: [], slice: 8 },
+                    miscellaneous: { title: "Miscellaneous", data: [], slice: 8 },
+                },
+                templates: {},
+                logos: {}
+            }
         }
     },
     methods: {
@@ -172,15 +152,15 @@ export default {
         },
         $switch_tab(tab) {
             switch(tab) {
-                case 0:
+                case "prototypes":
                     this.selected.search_by = this.search_by.prototypes
                     this.selected.content = this.prototypes
                     break
-                case 1:
+                case "logos":
                     this.selected.search_by = this.search_by.logo
                     this.selected.content = this.logos
                     break
-                case 2:
+                case "designs":
                     this.selected.search_by = this.search_by.designs
                     this.selected.content = this.designs
                     break
@@ -231,18 +211,17 @@ export default {
                 preview_box.removeClass("preview-box")                
             }, 500);
         },
+        $fetch(tab = this.tab) {
+            this.$api_fetch(tab, (item, title) => this.data[tab][title]["data"] = item)
+        },
     },
     mounted() {
         this.$def_w_h()
         this.$switch_tab(this.tab)
+        this.$fetch()
         this.parent_container = $(this.$refs['parent-container'])
         this.$refs['parent-container'].addEventListener("animationend", () => this.parent_container.removeClass("animated fadeInUp faster"))
-        $(window).resize(() => this.$def_w_h())
-        
-        this.$api_fetch('designs/poster', (results) => {
-            this.designs.poster = this.designs.poster.concat(results)
-        })
-        this.$api_fetch("designs/facebookPost", (results) => this.designs.facebookPost = results)
+        $(window).resize(() => this.$def_w_h())        
     }
 }
 </script>
@@ -253,7 +232,6 @@ export default {
     left: 15px;
     right: 15px;
     bottom: 0px;
-    background: #0D0D0D;
     z-index: 1000;
     border-radius: 10px 10px 0px 0px;
 }
@@ -271,12 +249,8 @@ export default {
     opacity: 1;
 }
 .horizontal-scroll-btn {
-    background: #111111 !important;
-    color: white !important;
     z-index: 1000;
     top: calc(50% - 30px);
-    width:60px;
-    height:60px;
     border-radius: 50%;
     /* position: absolute; */
 }

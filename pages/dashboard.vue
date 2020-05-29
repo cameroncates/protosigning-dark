@@ -1,6 +1,6 @@
 <template>
     <div class="row p-0 m-0" :style="{height: heights.window + 'px'}">
-        <div class="bg-darks overflow-auto pb-5" :style="{height: heights.window + 'px', width: widths.left_nav + 'px'}">
+        <div class="overflow-auto pb-5" :style="{height: heights.window + 'px', width: widths.left_nav + 'px'}">
             <!-- PROFILE INFO -->
             <div class="d-flex justify-content-between p-2 m-3">
                 <div class="row m-0">
@@ -23,7 +23,7 @@
                 <button @click="$new()" class="btn btn-block p-3 text-left bd-round-r d-flex font-weight-bold"><span class="material-icons ml-2 mr-3">add</span><span>New</span></button>
                 <p class="border-bottom ml-2 mr-2 mt-2"></p>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex"><span class="material-icons ml-2 mr-3">home</span><span>Home</span></button>
-                <button class="btn btn-block p-3 text-left bd-round-r btn-dark-special d-flex font-weight-bold "><span class="material-icons ml-2 mr-3">view_quilt</span><span>Templates</span></button>
+                <button class="btn btn-block p-3 text-left bd-round-r btn-primary box-shadow d-flex font-weight-bold "><span class="material-icons ml-2 mr-3">view_quilt</span><span>Templates</span></button>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex "><span class="material-icons ml-2 mr-3">style</span><span>All your Designs</span></button>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex "><span class="material-icons ml-2 mr-3">photo</span><span>Photos</span></button>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex "><span class="material-icons ml-2 mr-3">group</span><span>Share with me</span></button>
@@ -33,17 +33,14 @@
         </div>
         <div class="pl-4" :style="{width: widths.content_area + 'px'}">
             <!-- SEARCH CONTAINER -->
-            <div class="bg-dark m-0 row" :style="{height: heights.search_container + 'px'}">
+            <div class="bg-white box-shadow m-0 row" :style="{height: heights.search_container + 'px'}">
                 <div class="col-md-6 m-auto align-self-center text-center">
-                    <h4 class="text-white ls-2 col-md-12">Search your whole dashboard here</h4>
+                    <h4 class="ls-2 col-md-12">Search your whole dashboard here</h4>
                     <p class="col-md-12 ls-1 small">You can search for templates, designs and your projects here.</p>
-                    <div class="w-100 text-center input-group mt-4">
+                    <div class="w-100 text-center input-group mt-4 bd-round bg-light box-shadow">
+                        <input type="text" class="form-control p-4 bd-0 bg-light bd-round-l" placeholder="Search for templates or designs or logos">
                         <div class="input-group-prepend">
-                            <button class="btn material-icons bd-round-l bg-dark ">search</button>
-                        </div>
-                        <input type="text" class="form-control bg-dark p-4 bd-0 text-white" placeholder="Search for templates or designs or logos">
-                        <div class="input-group-prepend">
-                            <button class="btn material-icons bd-round-r bg-dark">clear</button>
+                            <button class="btn material-icons bd-round-r">search</button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +121,6 @@ export default {
     },
     mounted() {
         this.$init()
-        this.$new()
         $(window).resize(() => this.$def_w_h())
     }
 

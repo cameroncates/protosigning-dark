@@ -184,5 +184,22 @@ function $textResize(direction, { node, mouseX, fontsize, canvas }) {
         node.font({ size: fontsize})     
         c++
     }                 
+}
 
+function $uploadFile(callback) {
+    let input = $("<input>")
+    input.attr("type", "file")
+    $(document.body).append(input)
+    input.addClass("display-none")
+    input.click()
+    input.change(function(e) {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();        
+            reader.onload = function(e) {
+                input.remove()
+                callback(e.target.result)
+            }                
+            reader.readAsDataURL(this.files[0]);
+        }        
+    })
 }
