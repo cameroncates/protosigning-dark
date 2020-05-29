@@ -21,7 +21,7 @@
             <!-- MENU BUTTONS -->
             <div class="">
                 <button @click="$new()" class="btn btn-block p-3 text-left bd-round-r d-flex font-weight-bold"><span class="material-icons ml-2 mr-3">add</span><span>New</span></button>
-                <p class="border-bottom ml-2 mr-2 mt-2"></p>
+                <p class="bd-bottom ml-2 mr-2 mt-2"></p>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex"><span class="material-icons ml-2 mr-3">home</span><span>Home</span></button>
                 <button class="btn btn-block p-3 text-left bd-round-r btn-primary box-shadow d-flex font-weight-bold "><span class="material-icons ml-2 mr-3">view_quilt</span><span>Templates</span></button>
                 <button class="btn btn-block p-3 text-left bd-round-r d-flex "><span class="material-icons ml-2 mr-3">style</span><span>All your Designs</span></button>

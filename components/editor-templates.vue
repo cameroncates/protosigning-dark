@@ -2,7 +2,7 @@
 <div ref="root" class="p-absolute bg-white animated fadeInLeft faster overflow-auto pl-2 pr-2 pb-5" style="z-index:1200" :style="{width: root['w'] + 'px', height: root['h'] + 'px'}">
     <div class="input-group p-2 bd-bottom">
         <div class="input-group-prepend">
-            <button class="btn input-group-text material-icons p-0 bg-white bd-0">chevron_left</button>
+            <button @click="$hide()" class="btn input-group-text material-icons p-0 bg-white bd-0">chevron_left</button>
         </div>
         <input type="text" class="form-control bd-0" placeholder="Search...">
         <div class="input-group-append">
@@ -69,6 +69,12 @@ export default {
         }
     },
     methods: {
+        $hide() {
+            this.root.node.addClass("fadeOutLeft")
+            setTimeout(() => {
+                this.root.node.remove()
+            }, 500);
+        },
         $loaded(e) {
             e = $(e.target)
             e.addClass("animated zoomIn faster").parent().removeClass("bg-light-2")

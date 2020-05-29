@@ -17,7 +17,7 @@
             <div class="p-3 overflow-auto" :style="{width: width.content_area+ 'px', height: height.container + 'px'}">
                 <!-- SEARCH -->
                 <div class="w-100 text-center input-group bd-round">
-                    <input type="text" class="bd-round box-shadow bd-0 form-control bg-light p-4 mr-2 align-self-center" style="min-width:200px" placeholder="Search for Prototypes" v-model="keywords">
+                    <input type="text" class="bd-round box-shadow bd-0 form-control bg-light p-4 mr-3 align-self-center" style="min-width:200px" placeholder="Search for Prototypes" v-model="keywords">
                     <div class="input-group-prepend align-items-center bd-round bg-light box-shadow pl-2">
                         <button v-for="(item, i) in (selected.search_by)" :key="i" class="btn no-btn animated fadeInRight faster text-small">
                             <span class="mr-2">{{item.title}}</span> &#9207;

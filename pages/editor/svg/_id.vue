@@ -167,7 +167,7 @@ export default {
             loading: { $: false, msg: ""},
             window: { w: 0, h: 0},
             root: { node: null, w: 0, h: 0, },
-            left: { node: null, w: 360, h: 0, data: null, "Text": true, "Size & Rotation": false, "Alignment":false, "Shape": false  },
+            left: { node: null, w: 360, h: 0, data: null, "Text": false, "Size & Rotation": false, "Alignment":false, "Shape": false  },
             right: { node: null, w: 0, h: 0, list: [] },
             top: { node: null, w:0, h: 38 },
             workarea: { node: null, w:0, h:0 },
