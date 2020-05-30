@@ -22,39 +22,29 @@
                 <div class="row text-center mb-3">
                     <p class="w-100 font-weight-bold bd-top pt-2 text-center">or</p>
                 </div>
-                <!-- USER NAME -->
+                <!-- Email -->
                 <div class="input-group">
-                    <input @blur="$validate()" type="text" class="form-control bg-light-2 box-shadow p-4 mr-2 bd-round bd-0 " placeholder="Username" v-model="form.uname">
-                </div>                        
-                <div class="w-100 mb-3 ml-3 mt-2 row">
-                    <p class="small text-danger font-weight-bold">{{error.uname}}</p>
-                </div>
-                <!-- USER NAME -->
-
-                <!-- EMAIL -->
-                <div class="input-group">
-                    <input @blur="$validate()" type="email" class="form-control bg-light-2 box-shadow p-4 bd-round bd-0 " placeholder="Email or Phone number" v-model="form.email">
+                    <input @blur="$validate()" type="email" class="form-control bg-light-2 box-shadow p-4 mr-2 bd-round bd-0 " placeholder="Email" v-model="form.email">
                 </div>                        
                 <div class="w-100 mb-3 ml-3 mt-2 row">
                     <p class="small text-danger font-weight-bold">{{error.email}}</p>
                 </div>
-                <!-- EMAIL -->
+                <!-- Email -->
 
-                <!-- PASSWORD -->
+                <!-- Password -->
                 <div class="input-group">
-                    <input @blur="$validate()" type="password" class="form-control bg-light-2 box-shadow p-4 bd-round bd-0  mr-3" placeholder="Password" v-model="form.p1">
-                    <input @blur="$validate()" type="password" class="form-control bg-light-2 box-shadow p-4 bd-round bd-0 " placeholder="Re-type Password" v-model="form.p2">
+                    <input @blur="$validate()" type="password" class="form-control bg-light-2 box-shadow p-4 bd-round bd-0 " placeholder="Password" v-model="form.p1">
                 </div>                        
                 <div class="w-100 mb-3 ml-3 mt-2 row">
-                    <p class="small text-danger font-weight-bold" v-html="error.password"></p>
+                    <p class="small text-danger font-weight-bold">{{error.password}}</p>
                 </div>
-                <!-- PASSWORD -->
+                <!-- Password -->
 
                 <div class="row pl-3 pr-3 justify-content-end">
-                    <button @click="$router.push('/signin')"  class="btn mr-2 bd-round text-primary">signin instead</button>
-                    <button  @click="$signup()" class="btn btn-primary box-shadow bd-round p-2 pl-3 pr-3">
+                    <button @click="$router.push('/signup')"  class="btn mr-2 bd-round text-primary">Signup instead</button>
+                    <button  @click="$signin()" class="btn btn-primary box-shadow bd-round p-2 pl-3 pr-3">
                         <span v-if="loading" class="spinner-border spinner-border-sm"></span>
-                        <span v-else>Sign up</span>
+                        <span v-else>Sign In</span>
                     </button>
                 </div>
             </div>
@@ -76,14 +66,11 @@ export default {
                 container: 200
             },
             form: {
-                uname: "",
                 email: "",
                 p1: "",
-                p2: ""
             },
             error: {
                 password: "",
-                uname: "",
                 email: ""
             },
             loading: false
@@ -93,56 +80,37 @@ export default {
         $def_w_h() {
             this.heights.container = $(window).height()
         },
-        $signup() {
+        $signin() {
             let validate = this.$validate()
             if(validate && !this.loading) {
                 this.loading = true
-                let signingup = this.$store.dispatch("user/signup", {
-                    uname: this.form.uname,
-                    email: this.form.email,
-                    password: this.form.p1
-                })
-                signingup.then(data => {
-                    let message = this.$store.state.user.message
-                    if(!message) {
-                        this.loading = false
-                        let signin = this.$store.dispatch("user/signin", { email:this.form.email, password:this.form.p1 })
-                        signin.then(() => {
-                            this.$router.push("/dashboard")
-                        })
-                    }  else {
-                        this.loading = false
-                        this.error.email = message
-                    }
+                let signin = this.$store.dispatch("user/signin", { email: this.form.email, password: this.form.p1 })
+                signin.then((data) => {
+                  this.loading = false
+                  let message = this.$store.state.user.message                  
+                  message ? this.$show_msg(message) : this.$router.push("/dashboard")
                 })
             }
         },
+        $show_msg(msg) {
+          switch(msg) {
+            case "auth/user-not-found":
+              this.error.email = "This email do not exisit"
+              break
+            case "auth/wrong-password":
+              this.error.password = "Password is not correct."
+              break
+          }
+        },
         $validate() {
             let error = false,
-                pass_pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                email_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                uname_pattern = /^[a-zA-Z\s]*$/
-            this.error.password = this.error.email = this.error.uname = ""
+                email_pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-            if(this.form.p1 != this.form.p2) {
-                this.error.password = "Passwords do not match. <br>"
-                error = true
-            }
-            if(!pass_pattern.test(this.form.p1) || !pass_pattern.test(this.form.p2)) {
-                this.error.password += "Password must be minimum of 8 characters, at least one letter, one digit. <br>"
-                this.error.password += "It shall not include any special characters. <br>"
-                error = true
-            }
+          this.error.password = this.error.email = ""
+
             if(!email_pattern.test(this.form.email)) {
                 this.error.email = "The Email format is Invalid"
                 error = true
-            }
-            if(!uname_pattern.test(this.form.uname)) {
-                this.error.uname = "Username shall contain only Letters and spaces"
-                error = true
-            }
-            if(this.form.uname.length < 1) {
-                this.error.uname = "Empty or too short name."
             }
             return !error
         }

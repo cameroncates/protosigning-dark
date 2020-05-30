@@ -3,10 +3,10 @@
     <!-- HEADER -->
     <div class="row p-3 justify-content-between" ref="header">
       <div>
-        <button class="btn text-green font-weight-bold">ProtoSigning</button>
+        <button class="btn text-primary font-weight-bold">ProtoSigning</button>
       </div>
       <div>
-        <button @click="$router.push('/login')" class="btn">Login</button>
+        <button @click="$router.push('/signin')" class="btn">Signin</button>
         <button @click="$router.push('/signup')" class="btn">Signup</button>
       </div>
     </div>
@@ -15,7 +15,7 @@
     <!-- LANDING INTRO -->
     <div class="row pl-5 pr-5 border-bottoms" :style="{height: heights.site_intro + 'px'}">
       <div class="col-md-7 m-auto">
-        <h4 class="w-100 mb-3 ls-2 text-center font-weight-normal text-white animated fadeInUp slow">The best place to gave your buisness it's own identity and Style</h4>
+        <h4 class="w-100 mb-3 ls-2 text-center font-weight-normal animated fadeInUp slow">The best place to gave your buisness it's own identity and Style</h4>
         <p class="w-100 text-center  mt-1 ls-1 animated fadeInUp delay-1s slow">Trianglo is the best place for new starup buisnesses to gave
           identity to their buisnesses by creating their own site and buisness Logo
           totally free of cost. We have a huge variety of collections that our designers
@@ -23,9 +23,9 @@
           buisnesses.
         </p>
         <div class="w-100 text-center mt-4 pt-5 mb-5 pb-5 input-group">
-          <input type="text" class="form-control bg-dark p-4 mr-3 bd-round bd-0 text-white" placeholder="Search for templates or designs or logos">
+          <input type="text" class="form-control bg-light-2 box-shadow p-4 mr-3 bd-round bd-0 " placeholder="Search for templates or designs or logos">
           <div class="input-group-append">
-            <button class="btn btn-dark-special font-weight-bold pl-3 pr-3 bd-round" type="submit">Category &#9207;</button>
+            <button class="btn btn-primary font-weight-bold pl-3 pr-3 bd-round" type="submit">Category &#9207;</button>
           </div>
         </div>
         <!-- <div class="col-md-12 text-center pt-5">
@@ -36,13 +36,13 @@
     <!-- LANDING INTRO -->
 
     <!-- CONTENT-1 -->
-    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-dark" :style="{height: heights.window + 'px'}">
+    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Extracting Logo From Image</h4>
+        <h4 class="ls-2 mb-3">Extracting Logo From Image</h4>
         <p class="ls-1">With our powerfull algorithms, you can now extract a logo from an image, extracting a logo from image means
           that you can generate the source file (SVG) of that logo. After that you can do many changes to it like changing their colors, paths, points all sorts of stuff.
         </p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.computer" width="500px" alt="" data-aos="fade-left">
@@ -56,22 +56,22 @@
         <img :src="svg.web" width="500px" alt="" data-aos="fade-right">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Code Generation</h4>
+        <h4 class=" ls-2 mb-3">Code Generation</h4>
         <p class="ls-1">Not only you can create your web prototypes with drag and drop, you can also be able to get their front-end code in <strong>.html</strong>,
         <strong>.css</strong> and <strong>.js</strong> formats.</p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start here</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start here</span> <span class="material-icons">arrow_forward</span></button>
       </div>
     </div>
     <!-- CONTENT-2 -->
     
     <!-- CONTENT-3 -->
-    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-dark" :style="{height: heights.window + 'px'}">
+    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Responsive Designs</h4>
+        <h4 class=" ls-2 mb-3">Responsive Designs</h4>
         <p class="ls-1">You can create your prototypes in a responsive way, which will help you to be able to see, how your prototype desing looks
           on different devices such as <strong>Desktop, PC, Tablets and Phones</strong>
         </p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start now, it's free</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start now, it's free</span> <span class="material-icons">arrow_forward</span></button>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.responsive_design" width="500px" alt="" data-aos="fade-left">
@@ -85,21 +85,21 @@
         <img :src="svg.list" width="500px" alt="">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Create Logo By giving a set of details</h4>
+        <h4 class=" ls-2 mb-3">Create Logo By giving a set of details</h4>
         <p class="ls-1">Not only you can create your own logo from scratch, but you can use our artifical neural network to create a unique by providing some
           set of information such as <strong>logo name, color combinations, field etc.</strong> and on the basis of this info, our system will generate a unique logo for you.
           The results will shock you, try it!</p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
       </div>
     </div>
     <!-- CONTENET-4 -->
     
     <!-- CONTENT-5 -->
-    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-dark" :style="{height: heights.window + 'px'}">
+    <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Our SVG tool</h4>
+        <h4 class=" ls-2 mb-3">Our SVG tool</h4>
         <p class="ls-1">Use our powerful SVG tool to create beautiful and unique designs and logos and export them into the source file</p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Let's Go</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Let's Go</span> <span class="material-icons">arrow_forward</span></button>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.tools" width="500px" alt="" data-aos="fade-left">
@@ -113,19 +113,19 @@
         <img :src="svg.business" width="500px" alt="" data-aos="fade-right">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="text-white ls-2 mb-3">Team Collaboration - Share your projects with your colleagues</h4>
+        <h4 class=" ls-2 mb-3">Team Collaboration - Share your projects with your colleagues</h4>
         <p class="ls-1">With team Collaboration, you can be able to share you projects with colleagues, and can also edit their priviledges such as only viewing as well as 
           viewing and editing. You can speed up your workflow with team Collaboration and done your project with a very fast rate.
         </p>
-        <button class="btn btn-dark-special p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start Collaborating</span> <span class="material-icons">arrow_forward</span></button>
+        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start Collaborating</span> <span class="material-icons">arrow_forward</span></button>
       </div>
     </div>
     <!-- CONTENT-6 -->
 
 
     <!-- FOOTER -->
-    <div class="row bg-dark justify-content-center mt-5 p-3 border-top">
-      <button disabled class="btn text-white mr-3">2020 Protosign, All Rights Reserved.</button>
+    <div class="row bg-light-2 justify-content-center mt-5 p-3 bd-top">
+      <button disabled class="btn  mr-3">2020 Protosign, All Rights Reserved.</button>
       <button class="btn">DMCA</button>
       <button class="btn">Terms and Conditions</button>
       <button class="btn">About us</button>

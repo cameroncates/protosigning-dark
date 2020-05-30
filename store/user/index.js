@@ -80,7 +80,8 @@ export const actions = {
         }
     },
     async signup({ commit, dispatch, rootState }, { uname, email, password }) {
-        try {
+        try {            
+            commit("message", "")
             await auth.createUserWithEmailAndPassword(email, password).then(user => {
                 db.ref("users/"+user.user.uid).push({
                     uname, email, password
@@ -88,7 +89,7 @@ export const actions = {
                 .then(() => 
                 {
                     commit("message", "")
-                    dispatch('user/signin', { email, password } , { root: true })
+                    // dispatch('user/signin', { email, password } , { root: true })
                 })
                 .catch((error) => { 
                 })
@@ -100,20 +101,19 @@ export const actions = {
     },
     async signin({commit}, {email, password}) {
         try {
+            commit("message", "")
             await auth.signInWithEmailAndPassword(email, password)
             const token = await auth.currentUser.getIdToken()
             Cookie.set('access_token', token)
-            console.log('current user', auth.currentUser)   
             commit("uid", auth.currentUser.uid)
         }
         catch(err) {
-            console.log(err, 'my error')
+            commit("message", err.code)
         }
     },
     signupWithGoogle() {
 
     },
     signupWithFacebook() {
-
     }
 }

@@ -9,10 +9,8 @@ export const actions = {
 
         const parsed = cookieparser.parse(req.headers.cookie)
         const accessTokenCookie = parsed.access_token
+        if(!accessTokenCookie || accessTokenCookie == "null") return
 
-        if(!accessTokenCookie) return
-
-        // console.log(accessTokenCookie, 'my token')
         const decoded = JWTDecode(accessTokenCookie)
         if(decoded) {
             commit('user/uid', decoded.user_id)

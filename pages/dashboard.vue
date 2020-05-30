@@ -2,18 +2,40 @@
     <div class="row p-0 m-0" :style="{height: heights.window + 'px'}">
         <div class="overflow-auto pb-5" :style="{height: heights.window + 'px', width: widths.left_nav + 'px'}">
             <!-- PROFILE INFO -->
-            <div class="d-flex justify-content-between p-2 m-3">
-                <div class="row m-0">
-                    <img :src="svg.computer" width="30px" alt="" class="m-1">
+            <div class="p-relative">
+                <div class="d-flex justify-content-between p-2 m-3">
+                    <div class="row m-0">
+                        <img :src="svg.computer" width="30px" alt="" class="m-1">
+                        <div>
+                            <button class="btn align-self-center">
+                                <span v-if="user.info.uname">{{user.info.uname}}</span>
+                                <span v-else class="spinner-border spinner-border-sm"></span>
+                            </button>
+                        </div>
+                    </div>
                     <div>
-                        <button class="btn align-self-center">
-                            <span v-if="user_info.uname">{{user_info.uname}}</span>
-                            <span v-else class="spinner-border spinner-border-sm"></span>
-                        </button>
+                        <button @click="user.show = true" class="btn material-icons bd-round">keyboard_arrow_down</button>
                     </div>
                 </div>
-                <div>
-                    <button class="btn material-icons bd-round">keyboard_arrow_down</button>
+                <!-- DROPDOWN -->
+                <div v-if="user.show" class="p-2 p-absolute w-100" @mouseleave="user.show = false" style="top:0px">
+                    <div class="w-100 p-3 box-shadow bg-white border animated fadeIn faster">
+                        <div class="w-100 text-center">
+                            <img :src="svg.computer" width="125px" alt="">
+                        </div>
+                        <button class="btn btn-block mt-2 mb-2" :class="user.info.uname ? '' : 'bg-light-2'" >
+                            <span class="font-weight-bold">{{user.info.uname}}</span> <br>
+                            <span class="text-sm" >{{user.info.email}}</span> 
+                        </button>
+                        <button class="btn btn-block text-left text-small" v-for="(item, i) in user.dropdown" :key="i">
+                            <span :class="'icon-'+item.icon"></span>
+                            <span class="ml-3">{{item.title}}</span>
+                        </button>
+                        <button @click="$signout()" class="btn btn-block btn-primary bd-round box-shadow mt-3">
+                            <span v-if="user.signout" class="spinner-border spinner-border-sm"></span>
+                            <span>Sign out</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <!-- PROFILE INFO -->
@@ -77,14 +99,31 @@ export default {
                 left_nav: 300,
                 content_area: 500
             },
-            user_info: {
-                uname: null,
-                email: null,
-                password: null
+            user: {
+                info: {
+                    uname: null,
+                    email: null,
+                    password: null,
+                },
+                dropdown: [
+                    { icon: 'star', title: 'Account Settings'},
+                    { icon: 'star', title: 'Help'},
+                    { icon: 'star', title: 'Send Feedback'}
+                ],
+                show: false,
+                signout: false
             }
         }
     },
     methods: {
+        $signout() {
+            this.user.signout = true
+            this.$api_signout(() => {
+                this.user.signout = false
+                this.user.show = false
+                window.location.href = "/"
+            })
+        },
         get_File() {            
             this.$store.dispatch("user/get_test")
         },
@@ -101,7 +140,7 @@ export default {
             this.uid = this.$store.state.user.uid
             let get_info = this.$store.dispatch("user/info", this.uid)
             get_info.then(() => {
-                this.user_info = this.$store.state.user.info
+                this.user.info = this.$store.state.user.info
             })
         },
         $def_w_h() {

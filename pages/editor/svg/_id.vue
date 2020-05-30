@@ -49,7 +49,7 @@
         <div class="p-2 transition-3 w-100 d-flex align-items-center justify-content-center overflow-auto" ref="workarea" :style="{height: workarea['h'] + 'px'}">
             <div id="svg-container" :style="{width: canvas.w + 'px', height: canvas.h + 'px'}" class="border bd-2 p-relative hov-elem" @mouseleave="canvas.props.show = false">
                 <!-- PROPS -->
-                <div class="p-absolute text-right hov-tg scale-0" style="right:-16px;top:-16px">
+                <div class="p-absolute text-right hov-tg scale-0" style="right:-16px;top:-16px;">
                     <button @click="canvas.props.show = !canvas.props.show" class="btn text-white p-1 box-shadow bd-round material-icons transition-3" :class="canvas.props.show ? 'rotate-45 bg-danger' : 'rotate-0 bg-primary'">{{canvas.props.show ? 'add': 'more_vert'}}</button>
                     <div class="bg-white mt-2 box-shadow p-2 animated fadeIn faster" v-if="canvas.props.show">
                         <button @click="$canvas(item['icon'])" class="btn btn-block text-dark text-left" v-for="(item, i) in canvas.props.list" :key="i" :class="item.break ? 'bd-bottom p-0' : 'p-2'">
