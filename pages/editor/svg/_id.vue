@@ -41,7 +41,7 @@
                 <button class="btn material-icons">chevron_right</button>
             </div>
             <div class="d-flex">
-                <button class="btn d-flex"><span class="material-icons">group_add</span> <span class="text-danger font-weight-bold text-sm">(9+)</span></button>
+                <button @click="$collaborators($event)" class="btn d-flex"><span class="material-icons">group_add</span> <span class="text-danger font-weight-bold text-sm">(9+)</span></button>
                 <button class="btn material-icons">more_vert</button>
             </div>
         </div>
@@ -60,7 +60,7 @@
                         </button>
                     </div>
                 </div>
-                <svg 
+                <svg
                     id="svg" ref="svg"
                     width="100%" height="100%"
                     overflow="visible" version="1.1">
@@ -141,6 +141,7 @@ import c_zoom_overlay from '@/components/editor-zoom-overlay.vue'
 import c_templates from '@/components/editor-templates.vue'
 import c_layers from '@/components/editor-layers.vue'
 import c_code from '@/components/editor-code.vue'
+import c_collaborators from '@/components/editor-collaborators.vue'
 import { SVG } from '@svgdotjs/svg.js'
 
 import JSON_editor from '@/assets/json/editor.json'
@@ -159,10 +160,12 @@ export default {
         w_popup_v,
         c_draw,
         c_templates,
-        c_code
+        c_code,
+        c_collaborators
     },
     data() {
         return {
+            uid: null,
             add: { list:[], show: false },
             loading: { $: false, msg: ""},
             window: { w: 0, h: 0},
@@ -191,6 +194,11 @@ export default {
         }
     },
     methods: {
+        $collaborators(e) {
+            let { html, instance } = this.$component(c_collaborators, {offset: $(e.target).offset(), uid: this.uid })
+            $(document.body).prepend(html)
+
+        },
         $dropdown_ev(payload) {
             switch(payload.type) {
                 case "Font-Family":
@@ -225,7 +233,7 @@ export default {
             instance.$on("$select", (payload) => {
                 this.loading.msg = "Please wait while the file is ready"
                 this.loading.$ = true
-                if(payload.type == "elements") {
+                if(payload.type == "elements" || payload.type == "logos") {
                     let file = payload['file_url']
                     setTimeout(() => {
                         $readFile(file, (data) => {
@@ -292,6 +300,7 @@ export default {
 
             this.right.workarea = $(this.$refs['workarea'])
 
+            this.uid = this.$store.state.user.uid
             this.$w_h()
             // this.$templates()
         },

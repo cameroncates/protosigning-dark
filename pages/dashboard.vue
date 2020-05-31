@@ -23,15 +23,15 @@
                         <div class="w-100 text-center">
                             <img :src="svg.computer" width="125px" alt="">
                         </div>
-                        <button class="btn btn-block mt-2 mb-2" :class="user.info.uname ? '' : 'bg-light-2'" >
+                        <button class="btn btn-block mt-2 mb-4 bd-bottom" :class="user.info.uname ? '' : 'bg-light-2'" >
                             <span class="font-weight-bold">{{user.info.uname}}</span> <br>
                             <span class="text-sm" >{{user.info.email}}</span> 
                         </button>
-                        <button class="btn btn-block text-left text-small" v-for="(item, i) in user.dropdown" :key="i">
+                        <button class="btn btn-block text-left p-1" v-for="(item, i) in user.dropdown" :key="i">
                             <span :class="'icon-'+item.icon"></span>
-                            <span class="ml-3">{{item.title}}</span>
+                            <span class="ml-3 text-small">{{item.title}}</span>
                         </button>
-                        <button @click="$signout()" class="btn btn-block btn-primary bd-round box-shadow mt-3">
+                        <button @click="$signout()" class="btn btn-block btn-primary bd-round box-shadow mt-4">
                             <span v-if="user.signout" class="spinner-border spinner-border-sm"></span>
                             <span>Sign out</span>
                         </button>
@@ -79,11 +79,11 @@ import vue from 'vue'
 import { EventBus } from '@/globals/event-bus.js'
 
 // IMPORT COMPONENTS
-import createNew_component from '@/components/dashboard-createNew-popup.vue'
+import c_new from '@/components/dashboard-new.vue'
 
 export default {
     components: {
-        createNew_component
+        c_new
     },
     data() {
         return {
@@ -106,9 +106,9 @@ export default {
                     password: null,
                 },
                 dropdown: [
-                    { icon: 'star', title: 'Account Settings'},
-                    { icon: 'star', title: 'Help'},
-                    { icon: 'star', title: 'Send Feedback'}
+                    { icon: 'settings', title: 'Account Settings'},
+                    { icon: 'help', title: 'Help'},
+                    { icon: 'feedback', title: 'Send Feedback'}
                 ],
                 show: false,
                 signout: false
@@ -124,11 +124,8 @@ export default {
                 window.location.href = "/"
             })
         },
-        get_File() {            
-            this.$store.dispatch("user/get_test")
-        },
         $new() {            
-            let { html, instance } = this.$component(createNew_component)
+            let { html, instance } = this.$component(c_new)
             $(document.body).prepend(html)
             instance.$on('$goto', (url) => {
                 this.$router.push(url)

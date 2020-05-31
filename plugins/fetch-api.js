@@ -21,11 +21,5 @@ Vue.mixin({
                 callback(data, snap.key)
             })
         },
-        async $api_fetch_more(ref, { anchor_key, limit }, callback){
-            let db_ref = db.ref(ref)
-            await db_ref.orderByKey().startAt(anchor_key).limitToFirst(limit).on("child_added", (snap) => {
-                callback({ ...snap.val(), key: snap.key } )
-            })
-        },
     }
 })
