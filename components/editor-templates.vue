@@ -44,8 +44,8 @@ export default {
         return {
             root: { node: null, w: 0, h: 0, },
             tools: { node: null },
-            types: { node: null, show: false, w: 30 },
-            active: "logos",
+            types: { node: null, show: false, w: null },
+            active: "elements",
             select: null,
             data: {
                 elements: {
@@ -113,7 +113,9 @@ export default {
         $fetch(active) {
             this.active = active
             this.$api_fetch(active, (item, title) => this.data[this.active][title]["data"] = item)
-
+            this.$updateSize(this.active)
+        },
+        $updateSize(active) {
             switch(active) {
                 case "elements":
                     this.types.w = 40

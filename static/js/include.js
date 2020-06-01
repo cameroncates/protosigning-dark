@@ -203,3 +203,21 @@ function $uploadFile(callback) {
         }        
     })
 }
+// from data url
+function $img_wh(src, callback) {
+    let img = new Image();
+    img.src = src;
+    img.onload = () =>
+    {
+        callback({
+            width: img.width,
+            height: img.height
+        })
+    }
+}
+function $validateSVG(svg) {
+    svg = $("<svg " + svg.split("<svg ")[1])
+    svg.removeAttr("id x y width height")
+    // svg.wrapInner("<g></g>")
+    return svg[0]
+}

@@ -207,6 +207,11 @@
             { "break": true},
             { "icon": "full-screen", "title": "Enter Full Screen" }
         ],
+        "image": [
+            { "icon": "copy", "title": "Duplicate" },
+            { "icon": "delete", "title": "Delete" },
+            { "icon": "code-2", "title": "Convert to SVG" }
+        ],
         "customizations": [
             { "icon": "grid" },
             { "icon": "background" }

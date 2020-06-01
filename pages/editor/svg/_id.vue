@@ -49,10 +49,10 @@
         <div class="p-2 transition-3 w-100 d-flex align-items-center justify-content-center overflow-auto" ref="workarea" :style="{height: workarea['h'] + 'px'}">
             <div id="svg-container" :style="{width: canvas.w + 'px', height: canvas.h + 'px'}" class="border bd-2 p-relative hov-elem" @mouseleave="canvas.props.show = false">
                 <!-- PROPS -->
-                <div class="p-absolute text-right hov-tg scale-0" style="right:-16px;top:-16px;">
-                    <button @click="canvas.props.show = !canvas.props.show" class="btn text-white p-1 box-shadow bd-round material-icons transition-3" :class="canvas.props.show ? 'rotate-45 bg-danger' : 'rotate-0 bg-primary'">{{canvas.props.show ? 'add': 'more_vert'}}</button>
-                    <div class="bg-white mt-2 box-shadow p-2 animated fadeIn faster" v-if="canvas.props.show">
-                        <button @click="$canvas(item['icon'])" class="btn btn-block text-dark text-left" v-for="(item, i) in canvas.props.list" :key="i" :class="item.break ? 'bd-bottom p-0' : 'p-2'">
+                <div class="p-absolute hov-tg scale-0" ref="canvas-props" :style="canvas.props.style">
+                    <button @click="canvas.props.show = !canvas.props.show" class="btn text-white p-1 box-shadow bd-round material-icons transition-3" :class="canvas.props.show ? 'rotate-45 bg-danger' : 'rotate-0 '+canvas.props.btn_bg">{{canvas.props.show ? 'add': 'more_vert'}}</button>
+                    <div class="bg-white mt-2 box-shadow p-2 animated fadeIn faster w-100" v-if="canvas.props.show" style="min-width:200px">
+                        <button @click="$canvas(item['title'])" class="btn btn-block text-dark text-left" v-for="(item, i) in canvas.props.list" :key="i" :class="item.break ? 'bd-bottom p-0' : 'p-2'">
                             <span v-if="!item.break">
                                 <span class="mr-4" :class="'icon-'+item['icon']"></span>
                                 <span>{{item.title}}</span>
@@ -142,6 +142,7 @@ import c_templates from '@/components/editor-templates.vue'
 import c_layers from '@/components/editor-layers.vue'
 import c_code from '@/components/editor-code.vue'
 import c_collaborators from '@/components/editor-collaborators.vue'
+import c_pngtosvg from '@/components/editor-pngtosvg.vue'
 import { SVG } from '@svgdotjs/svg.js'
 
 import JSON_editor from '@/assets/json/editor.json'
@@ -161,7 +162,8 @@ export default {
         c_draw,
         c_templates,
         c_code,
-        c_collaborators
+        c_collaborators,
+        c_pngtosvg
     },
     data() {
         return {
@@ -178,7 +180,7 @@ export default {
             draw: { $: null, array: [], hasPlots: false, template: null , type: "select", C: null },
             textarea: {node: null, resize: null, fontsize: 50, x: 0, y:0, w:100,h:100},
             control: { type: { "1": null, "2": null, "3": null, "4": null }, cursor: null  }, // 4: RESIZERS, 1: STRECHNESS, 3: END-POINT 2:PATH-TO
-            canvas: { node: null, $: null, props: { node:null, list: [], show: false }, customizations: { node:null, list: [] }, w: 800, h: 800, rect: { x:110, y:0 }, resolution: null, full_screen: null },
+            canvas: { node: null, $: null, props: { btn_bg: 'bg-primary', node:null, list: [], show: false, style: { right:-16+'px', top:-16+'px', textAlign: 'right'} }, customizations: { node:null, list: [] }, w: 800, h: 800, rect: { x:110, y:0 }, resolution: null, full_screen: null },
             ev: { mousedown: false },
             coords: {
                 down: {x: 0, y: 0}
@@ -219,12 +221,31 @@ export default {
         },
         $canvas(p) {
             switch(p) {
-                case "download":
+                case "Download":
                     this.$save()
                     break
-                case "code":
+                case "SVG Code":
                     let { html, instance } = this.$component(c_code, { code: this.canvas.node[0].outerHTML})
                     $(document.body).prepend(html)
+                    break
+                case "Convert to SVG":             
+                    let src = this.draw.$.attr("href")
+                    this.loading.$ = true
+                    this.loading.msg = "It will take a while"
+                    $img_wh(src, (data) => {
+                        let { html, instance } = this.$component(c_pngtosvg, { img: {...data, dataURL: src } } )
+                        html = $(html)
+                        instance.$on('$primary-svg', (payload) => {
+                            this.draw.$.remove()
+                            payload = $validateSVG(payload, this.canvas.$)
+                            this.draw.$ = SVG(payload).clone()
+                            this.canvas.$.add(payload)
+                            this.loading.msg = ""
+                            this.loading.$ = false
+                        })
+                        html.addClass('d-none')
+                        $(document.body).append(html[0])
+                    })
                     break
             }
         },
@@ -237,10 +258,9 @@ export default {
                     let file = payload['file_url']
                     setTimeout(() => {
                         $readFile(file, (data) => {
-                            // this.draw.$ = SVG($(data)[0]).clone()
-                            // this.draw.type = "select"
-                            // this.draw.$.addTo(this.canvas.$.node)
-                            this.canvas.$.add($(data)[0])
+                            data = $validateSVG(data)
+                            this.draw.$ = SVG(data).clone()
+                            this.canvas.$.add(data)
                             this.loading.msg = ""
                             this.loading.$ = false
                         })                        
@@ -302,11 +322,11 @@ export default {
 
             this.uid = this.$store.state.user.uid
             this.$w_h()
-            // this.$templates()
+            this.$templates()
         },
         $init_component(component = this.draw.$, transform) {
             let id =  component.type +"-"+ (this.component.count[component.type] ? this.component.count[component.type] +=1 : this.component.count[component.type] = 1)
-            component.attr("id", id)
+            component.attr("c-id", id)
             this.components[id] = {
                 id,
                 type: component.type,
@@ -357,10 +377,6 @@ export default {
                 left: left + DOMRect.width - this.canvas.full_screen.outerWidth(),
                 top: top  + DOMRect.height - (this.canvas.full_screen.outerHeight())
             })
-            this.canvas.props.node.css({
-                left: left + DOMRect.width,
-                top: DOMRect.top
-            })
             this.canvas.customizations.node.css({
                 left: left - this.canvas.customizations.node.outerWidth(),
                 top: DOMRect.top + (DOMRect.height/2 - this.canvas.customizations.node.outerHeight()/2)
@@ -404,7 +420,7 @@ export default {
                     })
                     this.DOMRect.component = this.draw.$.node.getBoundingClientRect()
                     this.draw.$.each(function(i, children) {
-                        !$this.draw.$.attr("id") ? $this.$init_component($this.draw.$, transform) : ""
+                        !$this.draw.$.attr("c-id") ? $this.$init_component($this.draw.$, transform) : ""
                         this.dblclick(function() { $this.$resizers(this.node.parentNode) })
                     })
                     break
@@ -499,7 +515,7 @@ export default {
                 }
             }
             this.draw.$ ? this.DOMRect.component = this.draw.$.node.getBoundingClientRect() : ""
-            this.draw.$ && !this.draw.$.attr("id") ? this.$init_component(this.draw.$, transform) : ""
+            this.draw.$ && !this.draw.$.attr("c-id") ? this.$init_component(this.draw.$, transform) : ""
         },
         $m_move(e) {
             if((!this.ev.mousedown && !this.draw.hasPlots) || !$hasParentId(e.target, "svg")) return 
@@ -758,6 +774,7 @@ export default {
         $resizers(elem) {
             if($(elem.parentNode).attr("type") == "controls") return
             if($(elem).attr("id") == "canvas-bg") {
+                this.$img_tools('remove')
                 if(this.control["4"]) 
                     this.control["4"].remove()                
                 return
@@ -812,9 +829,32 @@ export default {
             c.fill("#00ffff").stroke({ color: "#22C", width:2})
             this.control["4"].front()
             // this.draw.$.node.parentNode.tagName !== "g" ? this.draw.$.front() : ""
-            c_ID = this.draw.$.attr("id")
+            c_ID = this.draw.$.attr("c-id")
+             
+            //  z[2] = top-right position
+            this.draw.$.type == "image" ? this.$img_tools(z[2]) : this.$img_tools('remove')
         },
+        $img_tools(pos) {
+            switch(pos) {
+                case 'remove':
+                    this.canvas.props.style.left = "auto"
+                    this.canvas.props.style.top = -16 + 'px'
+                    this.canvas.props.style.right = -16 + 'px'
+                    this.canvas.props.style.textAlign = "right"
+                    this.canvas.props.list = JSON_editor.canvas['props']
+                    this.canvas.props.btn_bg = 'bg-primary'
+                    break
+                default:
+                    this.canvas.props.style.right = "auto"
+                    this.canvas.props.style.top = (pos.y - 16) + 'px'
+                    this.canvas.props.style.left = (pos.x - 16) + 'px'
+                    this.canvas.props.style.textAlign = "left"
+                    this.canvas.props.list = JSON_editor.canvas['image']
+                    this.canvas.props.btn_bg = 'bg-primary-2'
+                    break
 
+            }
+        },
         // CONTROLS...
         $path_controls(type, props) {
             let { points, start } = props
