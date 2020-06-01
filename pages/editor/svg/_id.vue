@@ -106,6 +106,8 @@
         <span class="text-small ml-2">{{loading.msg}}</span>
     </button>
 
+    <c-group :g="draw.$ ? draw.$.node : ''" />
+
     <!-- CANVAS RESOLUTION -->
     <!-- <div ref="resolution" class="p-absolute">
         <input type="text" style="width:30px" class="bg-none bd-0 text-sm text-center text-primary" v-model="canvas.w">
@@ -143,12 +145,14 @@ import c_layers from '@/components/editor-layers.vue'
 import c_code from '@/components/editor-code.vue'
 import c_collaborators from '@/components/editor-collaborators.vue'
 import c_pngtosvg from '@/components/editor-pngtosvg.vue'
+import c_group from '@/components/editor-g.vue'
 import { SVG } from '@svgdotjs/svg.js'
 
 import JSON_editor from '@/assets/json/editor.json'
 import Canvg, { compressSpaces } from 'canvg';
 import rotate_ico from '@/assets/svg/rotate.svg'
 import rotate_png from '@/assets/png/rotate.png'
+import {v4 as uuid} from 'uuid'
 let v = null
 let c_ID = null
 
@@ -163,7 +167,8 @@ export default {
         c_templates,
         c_code,
         c_collaborators,
-        c_pngtosvg
+        c_pngtosvg,
+        "c-group": c_group
     },
     data() {
         return {
@@ -237,7 +242,7 @@ export default {
                         html = $(html)
                         instance.$on('$primary-svg', (payload) => {
                             this.draw.$.remove()
-                            payload = $validateSVG(payload, this.canvas.$)
+                            payload = $validateSVG(payload, uuid())
                             this.draw.$ = SVG(payload).clone()
                             this.canvas.$.add(payload)
                             this.loading.msg = ""
@@ -258,7 +263,7 @@ export default {
                     let file = payload['file_url']
                     setTimeout(() => {
                         $readFile(file, (data) => {
-                            data = $validateSVG(data)
+                            data = $validateSVG(data, uuid())
                             this.draw.$ = SVG(data).clone()
                             this.canvas.$.add(data)
                             this.loading.msg = ""

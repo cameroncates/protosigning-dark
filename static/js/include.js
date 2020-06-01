@@ -77,6 +77,26 @@ function $hasParentTag(elem, tag) {
         return false
     }    
 }
+function $parent(elem, tag) {
+    try {
+        if (elem.tagName == tag) return elem;
+        return elem.parentNode && this.$parent(elem.parentNode, tag);
+    }
+    catch(err) {
+        return false
+    }    
+
+}
+function $children({ child, parent_tag }) {
+    try {
+        if (child.tagName == parent_tag) return $(child).find("*");
+        return child.parentNode && this.$children({ child: child.parentNode, parent_tag } );
+    }
+    catch(err) {
+        return false
+    }    
+
+}
 function $datetime() {
     // For todays date;
     Date.prototype.today = function () { 
@@ -215,8 +235,10 @@ function $img_wh(src, callback) {
         })
     }
 }
-function $validateSVG(svg) {
+function $validateSVG(svg, id) {
     svg = $("<svg " + svg.split("<svg ")[1])
+    svg.attr('template-id', id)
+    console.log(svg, 'svg')
     svg.removeAttr("id x y width height")
     // svg.wrapInner("<g></g>")
     return svg[0]
