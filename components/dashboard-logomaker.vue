@@ -70,6 +70,7 @@ export default {
             this.loading.msg = "Searching for logo's related to keyword <b>"+keyword.toUpperCase()+"</b>" 
             let $this = this
             const res = await axios.get('/api/logo/'+keyword)
+            console.log(res, 'response')
             if(res.status == 200 && res.statusText == "OK") {
                 const data = $(res.data)
                 this.list = []
