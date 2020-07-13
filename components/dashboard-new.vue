@@ -18,13 +18,14 @@
                 <!-- SEARCH -->
                 <div class="w-100 text-center input-group bd-round">
                     <input type="text" class="bd-round box-shadow bd-0 form-control bg-light p-4 mr-3 align-self-center" style="min-width:200px" placeholder="Search for Prototypes" v-model="keywords">
-                    <div class="input-group-prepend align-items-center bd-round bg-light box-shadow pl-2">
-                        <button v-for="(item, i) in (selected.search_by)" :key="i" class="btn no-btn animated fadeInRight faster text-small">
+                    <div class="input-group-prepend align-items-center bd-round bg-primary box-shadow pl-2 pr-2">
+                        <button @click="search()" class="btn text-white"><span v-if="loading" class="spinner-border spinner-border-sm mr-2"></span> Search</button>
+                        <button v-for="(item, i) in (selected.search_by)" :key="i" class="btn no-btn animated fadeInRight faster text-small d-none">
                             <span class="mr-2">{{item.title}}</span> &#9207;
                         </button>
-                        <button class="btn ml-2 d-flex animated fadeInRight faster text-small" v-if="tab=='logos'">
+                        <!-- <button class="btn ml-2 d-flex animated fadeInRight faster text-small d-none" v-if="tab=='logos'">
                             <span class="align-self-center mr-2">Color</span><span class="round-md"></span>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <!-- SEARCH -->
@@ -35,12 +36,24 @@
                     </button>
                 </div>
                 <!-- SEARCH TAGS -->
-
+            
+            <div class="w-100 text-center" v-if="loading">
+                <button class="btn">
+                    <span class="spinner-border spinner-border-sm"></span> Loading...
+                </button>
+            </div>
             <div class="mt-5" v-for="(obj, key) in data[tab]" :key="key" :class="obj['data'].length == 0 ? 'd-none': ''">
                 <h4>{{obj.title}}</h4>
-                <div class="d-flex">
-                    <div v-for="(nested, i, j) in obj['data'].slice(0, obj.slice)" :key="j" class="mr-5 bg-light box-shadow">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <div @click="new_project(key, '')" class="m-3 border bg-light d-flex" style="width:300px">
+                        <p class="w-100 align-self-center text-center small">Blank</p>
+                    </div>
+                    <div @click="new_project(key, nested.img_url, $event)" v-for="(nested, i, j) in obj['data'].slice(0, obj.slice)" :key="j" class="m-3 bg-light box-shadow p-relative">
                         <img @load="$img_loaded($event)" :src="nested.img_url" alt="" width="300px">
+                        <div style="width:300px;height:200px;top:0px" class="bg-light p-absolute d-none justify-content-center align-items-center">
+                            <span class="spinner-border spinner-border-sm mr-2"></span>
+                            <span>Processing...</span>
+                        </div>
                         <p class="text-small p-2">{{nested.title}}</p>
                     </div>
                 </div>
@@ -64,18 +77,27 @@ import list from '@/assets/svg/list.svg'
 import computer from '@/assets/svg/computer.svg'
 import business from '@/assets/svg/business.svg'
 import new_file from "@/assets/svg/new-file.svg"
+import {v4 as uuid} from 'uuid'
+import axios from 'axios'
+import fetch from 'node-fetch'
+import cheerio from 'cheerio'
+
 export default {
     props: {
         e: {
             required: false
+        },
+        uid: {
+            required: true
         }
     },
     data() {
         return {
+            loading: false,
             tab: "designs",
-            keywords: "",
+            keywords: "bold",
             tabs: [
-                { icon: "home", title: "Prototypes", value: "prototypes"},
+                // { icon: "home", title: "Prototypes", value: "prototypes"},
                 { icon: "ac_unit", title: "Logos", value: "logos"},
                 { icon: "home", title: "Design & Art", value: "designs"},
             ],
@@ -100,9 +122,9 @@ export default {
                 ]
             },
             serach_tags: [
-                { title: "Birthday", },
-                { title: "design", },
-                { title: "art", },
+                // { title: "Birthday", },
+                // { title: "design", },
+                // { title: "art", },
             ],
             parent_container: null,           
             height: {
@@ -131,11 +153,70 @@ export default {
                     miscellaneous: { title: "Miscellaneous", data: [], slice: 8 },
                 },
                 templates: {},
-                logos: {}
-            }
+                logos: {
+                    logo: { title: "Logo", data:[], slice:8 }
+                }
+            },
+            url: "http://localhost:5000/logo/"
         }
     },
     methods: {
+        async search() {
+            let $this = this
+            this.loading = true
+            const res = await axios.get(this.url + this.keywords)
+            const data = $(res.data)
+            this.data.logos.logo.data = []
+            data.each(function() {
+                $this.data.logos.logo.data.push({
+                    img_url: $(this).find("img").attr("src")
+                })
+            })
+            this.tab="logos"
+            this.data.logos.logo.title = this.keywords
+            this.loading = false
+        },
+        search_logo(keywords) {
+            const proxyurl = "https://cors-anywhere.herokuapp.com/"
+            this.url += keywords
+            return fetch(proxyurl + this.url )
+                .then(response => response.text())
+        },
+        open_logo(url) {
+            const proxyurl = "https://cors-anywhere.herokuapp.com/"
+            return fetch(proxyurl + url )
+                .then(response => console.log(response, 'res'))
+
+        },
+        new_project(category, data, e) {
+            $(e.currentTarget).find("div").removeClass("d-none").addClass("d-flex")
+            setTimeout(() => {
+                if(data) {
+                    let ref = 'projects/'+this.uid,
+                        metadata = {
+                            date: $datetime(),
+                            title: 'Blank',
+                            data,
+                            owner: this.uid,
+                            collaborators: [],
+                            category,
+                            type: this.tab,
+                        }                    
+                    this.api_insert(ref, metadata, (key) => {
+                        let file = new Blob([''], {type: 'text/plain'}),
+                            uri = new Blob([''], {type: 'text/plain'})
+
+                        this.api_insert_storage(ref+'/'+key, { file, uri }, (file_url, uri_url) => {
+                            this.api_update(ref+'/'+key, {'file_url': file_url, 'uri_url': uri_url}, () => {
+                                this.$close()
+                                setTimeout(() => this.$emit('$goto', '/editor/svg/'+key) , 500);
+                            })
+                        })                    
+                    })
+                }
+                
+            }, 100);
+        },
         $open(id, workspace) {
             // 0 => PROTOTYPING WORKSPACE
             // 1 => SVG WORKSPACE
@@ -159,6 +240,7 @@ export default {
                 case "logos":
                     this.selected.search_by = this.search_by.logo
                     this.selected.content = this.logos
+                    this.search()
                     break
                 case "designs":
                     this.selected.search_by = this.search_by.designs
@@ -166,22 +248,6 @@ export default {
                     break
             }
             return tab
-        },
-        $scrollLeft(e) {
-            let content = $(e.target).next(),
-                width = content.outerWidth(),
-                currentScrollPos = content.scrollLeft()
-            content.animate({
-                scrollLeft: currentScrollPos + width/2
-            }, 600)
-        },
-        $scrollRight(e) {
-            let content = $(e.target).next().next(),
-                width = content.outerWidth(),
-                currentScrollPos = content.scrollLeft()
-            content.animate({
-                scrollLeft: currentScrollPos - width/2
-            }, 600)
         },
         $close() {
             this.parent_container.addClass("animated fadeOutDown faster")
@@ -216,12 +282,14 @@ export default {
         },
     },
     mounted() {
+        
         this.$def_w_h()
         this.$switch_tab(this.tab)
         this.$fetch()
         this.parent_container = $(this.$refs['parent-container'])
         this.$refs['parent-container'].addEventListener("animationend", () => this.parent_container.removeClass("animated fadeInUp faster"))
         $(window).resize(() => this.$def_w_h())        
+        console.log(this.uid, 'uid')
     }
 }
 </script>

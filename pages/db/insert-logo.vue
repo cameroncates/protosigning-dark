@@ -113,6 +113,7 @@ export default {
         },
         createImgFile(input) {
             let file = input.files[0]
+            console.log(file, 'image-file')
             let $this = this
             if (input.files && input.files[0]) {
                 var reader = new FileReader();    

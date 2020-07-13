@@ -60,6 +60,12 @@ export default {
   router: {
     middleware: ["authenticated"]
   },
+  serverMiddleware: [
+    {
+      path: '/api',
+      handler: '~/api/index.js'
+    }
+  ],
   /*
   ** Nuxt.js modules
   */

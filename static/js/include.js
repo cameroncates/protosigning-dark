@@ -123,24 +123,24 @@ async function $readFile(file, callback) {
     }
     rawFile.send(null);                
 }
-function $lineTo(ref, { x2, y2 }) {
+function $lineTo(ref, { x, y }) {
     let points = ref.array(),
         A = points[0],
-        B = [points[0][0] + x2, points[0][1] + y2]
+        B = [points[0][0] + x, points[0][1] + y]
     ref.plot([A, B])
 }
-function $pencilDrawing(ref, array, {x2, y2}) {
+function $pencilDrawing(ref, array, {x, y}) {
     let { val } = $lastIndexOf(array)
     let p1 = val,
-        p2 = ["L", x2, y2]
+        p2 = ["L", x, y]
     if($distance(p1, p2) > 5) {
         array.push(p2)
         ref.plot(array)
     }
 }
-function $polyTo(ref, array, { x2, y2 }) {
+function $polyTo(ref, array, { x, y }) {
     let { i } = $lastIndexOf(array)
-    array[i] = [x2, y2]
+    array[i] = [x, y]
     ref.plot(array)    
 }
 
@@ -238,8 +238,42 @@ function $img_wh(src, callback) {
 function $validateSVG(svg, id) {
     svg = $("<svg " + svg.split("<svg ")[1])
     svg.attr('template-id', id)
-    console.log(svg, 'svg')
     svg.removeAttr("id x y width height")
     // svg.wrapInner("<g></g>")
     return svg[0]
+}
+function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+  
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+  
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+  
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+  
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+  
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
+  
+  }
+  
+function colorPalette() {
+    let input = $('<input>')
+    input.attr('type', 'color')
+    input.css({
+        display: 'none'
+    })
+    $(document.body).append(input)
+    input.trigger('click')
+    return input
 }

@@ -193,8 +193,15 @@
     "right": [
         { "icon": "layers", "paths": 6 }
     ],
-    "canvas": {
-        "props": [
+    "selector": {
+        "g": [
+            { "icon": "copy", "title": "Duplicate" },
+            { "icon": "delete", "title": "Delete" },
+            { "icon": "code-2", "title": "Convert to SVG" }
+        ]
+    },
+    "more_vert": {
+        "canvas": [
             { "icon": "copy", "title": "Duplicate" },
             { "icon": "delete", "title": "Delete/Clear" },
             { "icon": "download", "title": "Download" },
@@ -207,14 +214,22 @@
             { "break": true},
             { "icon": "full-screen", "title": "Enter Full Screen" }
         ],
-        "image": [
-            { "icon": "copy", "title": "Duplicate" },
-            { "icon": "delete", "title": "Delete" },
-            { "icon": "code-2", "title": "Convert to SVG" }
-        ],
-        "customizations": [
-            { "icon": "grid" },
-            { "icon": "background" }
-        ]
+        "selector": {
+            "template": [
+                { "icon": "copy", "title": "Show all elements" },
+                { "icon": "copy", "title": "Select parent" },
+                { "icon": "copy", "title": "Duplicate" },
+                { "icon": "delete", "title": "Delete" }              
+            ],
+            "basic": [
+                { "icon": "copy", "title": "Duplicate" },
+                { "icon": "delete", "title": "Delete" }
+            ],
+            "image": [
+                { "icon": "copy", "title": "Duplicate" },
+                { "icon": "delete", "title": "Delete" },
+                { "icon": "code-2", "title": "Convert to SVG" }                
+            ]
+        }
     }
 }

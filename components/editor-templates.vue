@@ -112,7 +112,11 @@ export default {
         },
         $fetch(active) {
             this.active = active
-            this.$api_fetch(active, (item, title) => this.data[this.active][title]["data"] = item)
+            this.$api_fetch(active, (item, title) => {
+                if(this.data[this.active][title]) {
+                    this.data[this.active][title]["data"] = item
+                }
+            })
             this.$updateSize(this.active)
         },
         $updateSize(active) {
@@ -128,7 +132,7 @@ export default {
             this.root.node = $(this.$refs['root'])
             this.tools.node = $(this.$refs['tools'])
             this.types.node = $(this.$refs['template-types'])
-            this.$fetch(this.active)
+            this.$fetch("elements")
             this.$w_h()
         },
         $w_h() {
