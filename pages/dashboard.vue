@@ -30,14 +30,6 @@ export default {
             keywords: "bold"
         }
     },
-    middleware() {
-        const proxyurl = "https://cors-anywhere.herokuapp.com/"
-        let a = axios.get(proxyurl + 'https://www.brandroot.com/names?keyword=bold')
-        a.then((data) => {
-            console.log(data)
-        })
-
-    },
     methods: {
         search_keywords(keywords) {
             this.keywords = keywords

@@ -1,7 +1,5 @@
-require('events').EventEmitter.defaultMaxListeners = 10000;
 const express = require("express");
 const puppeteer = require('puppeteer');
-const cors = require("cors");
 const bodyParser = require('body-parser')
 const app = express()
 let scrap = null;
@@ -16,12 +14,11 @@ async function search_logo(keywords, callback) {
     try {
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
-        await page.goto('https://www.brandroot.com/names?keyword='+keywords, {waitUntil: "networkidle2"})
+        await page.goto('https://www.brandroot.com/names?keyword='+keywords, {waitUntil: "networkidle0"})
         const searching = async() => {
             scrap = await page.evaluate(() => document.querySelector('div.brands-list').innerHTML)
             if(scrap)
                 callback(scrap)
-                // res.send('<!doctype html><html><body>'+scrap+'</body></html>')
             else 
                 return searching(0)
           }

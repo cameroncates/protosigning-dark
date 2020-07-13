@@ -5,14 +5,15 @@
   "author": "cameron",
   "private": true,
   "scripts": {
+    "step1": "npm install",
     "server": "nodemon server/server.js",
     "dev": "nuxt",
+    "start": "nuxt start --hostname silicate.pk --port 51615",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "heroku-postbuild": "npm run build"
   },
-  "proxy": "http://localhost:3000",
   "dependencies": {
     "@svgdotjs/svg.draggable.js": "^3.0.2",
     "@svgdotjs/svg.js": "^3.0.16",
