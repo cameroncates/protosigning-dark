@@ -77,7 +77,7 @@ export default {
                     data.each(function() {
                         $this.list.push({
                             img: $(this).find("img").attr("src"),
-                            desc: $(this).find("img").attr("alt").split(".com")[0].toUpperCase()
+                            desc: $(this).find("img").attr("alt")
                         })
                     })
                     this.loading.state = false
