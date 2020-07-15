@@ -8,9 +8,8 @@
     "step1": "npm install",
     "server": "nodemon server/server.js",
     "dev": "nuxt",
-    "start": "nuxt start --hostname silicate.pk --port 51615",
-    "build": "nuxt build",
     "start": "nuxt start",
+    "build": "nuxt build",
     "generate": "nuxt generate",
     "heroku-postbuild": "npm run build"
   },
@@ -41,7 +40,7 @@
     "selenium-webdriver": "^4.0.0-alpha.7",
     "svg.draggable.js": "^3.0.0",
     "tls": "0.0.1",
-    "uuid": "^8.0.0",
+    "uuid": "^8.2.0",
     "websocket": "^1.0.31",
     "ws": "^6.2.1"
   },

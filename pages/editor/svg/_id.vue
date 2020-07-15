@@ -173,7 +173,16 @@ export default {
         c_code,
         c_collaborators,
         c_pngtosvg,
-    },
+    },    
+    head () {
+        return {
+            title: "Protosigning",
+            meta: [
+                // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+                { hid: 'description', name: 'description', content: "" }
+            ]
+        }
+    },   
     data() {
         return {
             save: false,

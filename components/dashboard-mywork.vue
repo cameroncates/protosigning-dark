@@ -135,7 +135,7 @@ export default {
                         owner: this.uid,
                         collaborators: [],
                         created: $datetime(),
-                        pages: [{ title: "Blank" }],
+                        pages: [{ title: "Blank", workspace: "<div>Empty</div>", nodes: "<div></div>" }],
                     }
                     this.api_insert('projects/web/'+this.uid, obj, (project_key) => {
                         this.api_fetch_child_ref('users/'+this.uid, (key) => {
@@ -152,10 +152,7 @@ export default {
             let ref = null
             switch (opt) {
                 case 'open_web':
-                    var port = prompt("Please enter port number", "5050");
-                    if(port) {
-                        window.open('http://localhost:'+port+'/workspace/web/prj-t='+project.title+"&prj-id="+project.key, '_blank')
-                    }
+                    this.$router.push('/workspace/web/prj-t='+project.title+"&prj-id="+project.key)
                     break;
                 case 'open_logo':
                     this.$router.push('/editor/svg/'+project)
