@@ -16,9 +16,11 @@
             </button>
             <!-- <button @click="update_pages()" class="btn border mt-4 box-shadow">Refresh</button> -->
         </div>
-        <div @click="active_page(i, active)" class="m-2 d-flex justify-content-between border border-left-0 border-right-0 border-top-0 hover-effect" v-for="(item, i) in pages" :key="i" :class="{'blue-bg-2 box-shadow': i === active }">
-            <p @blur="change_title(i, $event)" class="btn col-md-10 text-left pl-4 font-14" contenteditable="true">{{item.title}}</p>
-            <button @click="page_opt($event, i)" class="btn col-md-1"><i class="fa fa-ellipsis-v"></i></button>
+        <div @click="active_page(i, active)" class="m-2" v-for="(item, i) in pages" :key="i" :class="{'blue-bg-2 box-shadow': i === active && item.title }">
+            <div v-if="item.title" class=" border border-left-0 border-right-0 border-top-0 hover-effect d-flex justify-content-between">
+                <p @blur="change_title(i, $event)" class="btn col-md-10 text-left pl-4 font-14" contenteditable="true">{{item.title}}</p>
+                <button @click="page_opt($event, i)" class="btn col-md-1"><i class="fa fa-ellipsis-v"></i></button>
+            </div>
         </div>          
     </div>
 
@@ -79,8 +81,7 @@ export default {
                     switch(value) {
                         case "delete":
                             if(this.pages.length > 1) {
-                                this.pages.splice(j, 1)
-                                this.setCookie("proto-pages", this.pages, 14)
+                                this.pages[j].title = null
                             }
                             break
                     }
