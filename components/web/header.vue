@@ -11,7 +11,7 @@
           <button class="btn"><span class="icon-redo p-0" style="font-size:15px;"></span></button>
           <button @click="preview()" class="btn hover-effect"><span class="icon-mobile-devices"></span></button>
           <button class="btn btn-light ml-3"> Save</button>
-          <button class="btn btn-light ml-1"> Export &nbsp;&#9207;</button>
+          <button @click="export_func($event, export_)" class="dropdown-btn btn btn-light ml-1"> Export &nbsp;&#9207;</button>
           <button class="btn btn-primary ml-3 pl-4 pr-4" @click="visible=true">Share</button>
           <button><span class="icon-profile-pic"></span></button>
         </div>
@@ -38,7 +38,7 @@
                   <button @click="$drop_down($event, 'restrictions', restrictions )" class="input-group-text btn box-shadow ml-2 mr-4 border-0 no-radius"><span class="icon-edit-pencil" style="font-size:14px"></span> <span class="text">{{restrictions.active}}</span> &nbsp; &#9662;</button>
               </div>
               <div class="input-group-append">
-                  <button @click="invite_user()" class="input-group-text btn btn-dark bg-dark text-white box-shadow ml-2 border-0"><span class="icon-user-add"></span></button>
+                  <button @click="invite_user()" class="input-group-text btn ml-2 border-0"><span class="icon-user-add text-primary"></span></button>
               </div>
             </div>        
             <p class="col-md-12 text-danger font-bold small mb-2">{{err_msg}}</p>    
@@ -54,10 +54,14 @@
 <script>
 import vue from 'vue'
 import dropdown from '@/components/website/dropdown.vue'
+import dropdown_list from '@/components/dropdown-list.vue'
 import { db } from '@/services/firebase'
+import JSZip from 'jszip'
+let prettify = require('prettify-html')
 export default {
   components: {
-    dropdown
+    dropdown,
+    dropdown_list,
   },
   data() {
     return {
@@ -75,11 +79,138 @@ export default {
       visible: false,
       err_msg: null,
       project_key: null,
-      uid: null
+      uid: null,
+      export_: [
+          { title: "Export in HTML/CSS", value: 'HTML/CSS' },
+          { title: "Export Project", value: 'ZIP' },
+
+      ],
+      container: null,
+      html: {
+          raw: null,
+          non_compiled: null,
+      },
+      css: {
+          raw: "",
+          obj: {}
+      },
 
     }
   },
   methods: {
+    compile_code() {
+        let children = this.html.non_compiled.find("*")
+        let counter = {}
+        for(let i=0; i<children.length; i++) {
+            let child = $(children[i])
+            let obj = {
+                node: child,
+                removed_attr: [],
+                removed_class: null
+            }
+
+            if(child.attr("style")) {
+                let tag = child.prop('tagName').toLowerCase(),
+                    id = null
+                counter[tag] ? counter[tag] += 1 : counter[tag] = 1
+                id = tag + "_"+counter[tag]
+                this.css.raw += "#"+ id + "{" + child.attr("style") + "}"
+                this.css.obj[id] = child.attr("style")
+                child.removeAttr("style")
+                child.attr("id", id)
+            }
+
+            if(child.attr('component')) {
+                obj.removed_attr.push({name: "component", value: child.attr('component')})
+                child.removeAttr('component')
+            }
+            child.hasClass("connectedSortable") ? child.removeClass("connectedSortable") : ""
+            child.hasClass("ui-sortable") ? child.removeClass("ui-sortable") : ""
+            child.hasClass("ui-sortable-handle") ? child.removeClass("ui-sortable-handle") : ""
+            child.hasClass("component-active") ? child.removeClass("component-active") : ""
+            child.attr("class") === "" ? child.removeAttr("class") : ""
+            child.attr("to-be-inserted") ? child.removeAttr("to-be-inserted") : ""
+            child.attr("container-type") ? child.removeAttr("container-type") : ""
+
+            // this.components.push(obj)
+        }
+        let start = `
+        <html>
+            <head>
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+            </head>
+        <body>`
+        let end = "</body></html>"
+        this.html.raw = prettify( start + this.html.non_compiled.html() + end)
+        this.css.raw = this.beautify_css(this.css.raw)
+        // this.editor.setValue(this.html.raw)
+
+        return {
+          html: this.html.raw,
+          css: this.css.raw
+        }
+    },
+    beautify_css(css) {
+        var beautified = cssbeautify(css, {
+            indent: '  ',
+            openbrace: 'separate-line',
+            autosemicolon: true
+        });             
+        return beautified
+    },
+
+    export_func(e, list) {          
+        let { html, instance } = this.component(dropdown_list, { e, list, width:250 } )
+        instance.$on("select", payload => {
+          switch(payload.value) {
+            case "HTML/CSS":
+              $("#code-btn").click()
+              break
+            case "ZIP":
+              let project_id = this.$route.params.id.split("prj-id=")[1]
+              let ref = "projects/web/"+this.uid+"/"+project_id
+
+              this.api_fetch(ref, (payload) => { 
+                if(payload) {
+                  payload = payload.pages
+                  var zip = new JSZip();
+                  for (var i = 0; i < payload.length; i++) {
+                    
+                    if(payload[i].title) {
+                      $(".workspace").html(payload[i].workspace)
+                      
+                      this.html.non_compiled = $('.workspace').clone()
+                      this.html.raw = $('.workspace').html()
+                      this.css.raw = ""
+                      this.css.obj = {}
+
+                      let compiled = this.compile_code()
+                      zip.file(payload[i].title + ".html", compiled.html);
+                      zip.file(payload[i].title + ".css", compiled.css);
+                    }
+                  }
+                  zip.generateAsync({
+                      type: "base64"
+                  }).then(function(content) {
+                      window.location.href = "data:application/zip;base64," + content;
+                  });       
+                }
+              })
+              break
+          }
+        })
+        document.body.append(html)  
+
+    },
+    component(component, props = null) {
+        let ComponentClass = vue.extend(component)
+        let instance = new ComponentClass({ propsData: props })
+        instance.$mount()
+        return {
+            html: instance.$el,
+            instance
+        }
+    },
     edit(obj) {
       this.email = obj.email
       delete this.emails[this.email]
@@ -215,7 +346,11 @@ export default {
     let $this = this
     let title = this.$router.currentRoute.params.id.split("&")
     this.project_title = title[0].split("=")[1]
-    this.uid = this.$store.state.user.uid
+    if(this.$router.currentRoute.params.id.split("&")[2]) {
+        this.uid = this.$router.currentRoute.params.id.split("&")[2].split("=")[1]
+    } else {
+        this.uid = this.$store.state.user.uid
+    }
 
     this.$valid_mails()
   

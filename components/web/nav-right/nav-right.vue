@@ -1,6 +1,6 @@
 <template>
   <div class="default-border pt-5 flex nav-right-container">
-      <button ref="code-btn" class="icon-code box-shadow bg-white font-weight-bold"></button>
+      <button ref="code-btn" id="code-btn" class="icon-code box-shadow bg-white font-weight-bold"></button>
   </div>
 </template>
 

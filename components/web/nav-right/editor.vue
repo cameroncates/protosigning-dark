@@ -12,10 +12,8 @@
             <button ref="tab_css"  :class="{'btn-primary': tab === 2 }" class="btn p-3 font-weight-bold"><i class="fa fa-css3 font-bold"></i> CSS</button>
         </div>
         <div class="row box-shadow bg-light floating-div" id="controls">
-            <button class="btn btn-light p-3 pl-4 font-weight-bold"><i class="fa fa-font font-20"></i></button>
-            <button class="btn btn-light p-3 font-weight-bold"><i class="fa fa-arrow-down font-20"></i></button>
-            <button class="btn btn-light p-3 font-weight-bold mr-3"><i class="fa fa-copy font-bold font-20"></i></button>
-            <button class="btn btn-light border border-top-0 border-bottom-0" ref="close"><span class="icon-cross-cancel text-danger" style="font-size:30px"></span></button>
+            <button @click="save()" class="btn material-icons btn-hov">save_alt</button>
+            <button class="btn material-icons btn-hov" ref="close">clear</button>
         </div>
 
     </div>
@@ -23,6 +21,7 @@
 
 <script>
 let prettify = require('prettify-html')
+import JSZip from 'jszip'
 
 export default {
     data() {
@@ -39,10 +38,24 @@ export default {
             components: [],
             close: null,
             container: null,
-            tab: 1
+            tab: 1,
+            page: 0,
+            uid: null
         }
     },
     methods: {
+        save() {            
+            let data = this.compile_html()
+            var zip = new JSZip();
+            zip.file('HTML' + ".html", data.html);
+            zip.file('CSS' + ".css", data.css);
+            zip.generateAsync({
+                type: "base64"
+            }).then(function(content) {
+                window.location.href = "data:application/zip;base64," + content;
+            });       
+
+        },
         close_editor() {
             this.container.remove()
             let children = $('.workspace').find("*")
@@ -111,11 +124,21 @@ export default {
 
                 this.components.push(obj)
             }
-            let start = "<html><head></head><body>"
+            let start = `
+            <html>
+                <head>
+                    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+            <body>`
             let end = "</body></html>"
             this.html.raw = prettify( start + this.html.non_compiled.html() + end)
             this.css.raw = this.beautify_css(this.css.raw)
             this.editor.setValue(this.html.raw)
+
+            return {
+                html: this.html.raw,
+                css: this.css.raw
+            }
         },
         beautify_css(css) {
             var beautified = cssbeautify(css, {
@@ -148,6 +171,14 @@ export default {
             $($this.$refs['tab_html']).click(() => $this.switch_tab(1))
             $($this.$refs['tab_css']).click(() => $this.switch_tab(2))
         })
+
+        
+        if(!this.getCookie("proto-page")) {
+            this.setCookie("proto-page", 0, 14)
+            this.page = 0
+        } else {
+            this.page = this.getCookie("proto-page")
+        }        
     }
 }
 </script>

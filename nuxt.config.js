@@ -41,6 +41,7 @@ export default {
       { src: "/js/dip/FILTER.js"},
       { src: "/js/dip/IMG_FUNCTIONS.js"},
       { src: "/js/dip/EDGE_DETECTOR.js"},
+      { src: "/js/css-beautify.js"},
       { src:"https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js"},
       { src: "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"},
       { src: "https://unpkg.com/aos@next/dist/aos.js"},
@@ -60,6 +61,7 @@ export default {
   */
   css: [
     '~assets/css/bootstrap-ext.css',
+    '~assets/bootstrap-ext.css',
     '~assets/css/animate-css.css',
     '~assets/icon/style.css',
     '~assets/font-icon/style.css'

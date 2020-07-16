@@ -54,15 +54,15 @@ export default {
             more_options: {
                 list: [
                     { title: "<span class='icon-load-balancer'></span>", value: 'nodes' },
-                    { title: "<span class='icon-content_copy'></span>", value: 'copy' },
+                    // { title: "<span class='icon-content_copy'></span>", value: 'copy' },
                     { title: "<span class='icon-delete mt-2 pt-2'></span>", value: 'delete' },
                 ],
                 open: false,
             },
             node_options: {
                 list: [
-                    { title: "<span class='icon-edit-pencil'></span>", value: 'edit' },
-                    { title: "<span class='icon-content_copy'></span>", value: 'duplicate' },
+                    // { title: "<span class='icon-edit-pencil'></span>", value: 'edit' },
+                    // { title: "<span class='icon-content_copy'></span>", value: 'duplicate' },
                     { title: "<span class='icon-delete mt-2 pt-2'></span>", value: 'delete' },
                 ],
                 open: false,
@@ -83,6 +83,10 @@ export default {
                             if(this.pages.length > 1) {
                                 this.pages[j].title = null
                             }
+                            break
+                        case "nodes":
+                            this.nodes = $get_children(this.workspace)
+                            this.page_clicked = true
                             break
                     }
                 })
@@ -119,11 +123,10 @@ export default {
             this.setCookie("proto-page", this.active, 14)
             this.api_update(this.ref, { pages: this.pages }, (payload) => {})
 
-            console.log(active, i)
         },
         new_page() {
             this.pages.push({
-                title: "New Blank Page",
+                title: "Page " + this.pages.length,
                 workspace: `
                     <div id="navigation-container"></div>
                     <div id="header-container"></div>
@@ -134,23 +137,21 @@ export default {
             this.api_update(this.ref, { pages: this.pages }, (payload) => {})
         },
         change_title(i, e) {
-            this.pages[i].title = e.target.innerText            
+            let count = 0
+            for(let j=0; j<this.pages.length; j++) {
+                if(this.pages[j].title) {
+                    if(this.pages[j].title == e.target.innerText && j !== i) {
+                        count += 1
+                    }
+                }
+            }
+            if(count > 0) {
+                this.pages[i].title = e.target.innerText + " copy (" + count + ")"
+                e.target.innerText += " copy (" + count + ")"
+            } else {
+                this.pages[i].title = e.target.innerText            
+            }
             this.api_update(this.ref, { pages: this.pages }, (payload) => {})
-        },
-        change_page(i, page) {
-            let { raw, key } = page
-            this.workspace.html(raw)
-            this.$store.dispatch('website-state/$w_active_page', { i, db: key } )
-            this.$store.dispatch('website-state/$w_update_page', { 
-                key: this.key, 
-                uid: this.uid, 
-                workspace: this.workspace, 
-                active: i, 
-                db_data: {
-                    title: this.pages[active.i].title,
-                    raw: this.pages[active.i].raw
-                } 
-            })
         },
         $more_options(items, list, j) {
             let $this = this
