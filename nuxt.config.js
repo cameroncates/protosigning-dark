@@ -62,8 +62,8 @@ export default {
     '~assets/css/bootstrap-ext.css',
     '~assets/bootstrap-ext.css',
     '~assets/css/animate-css.css',
+    '~assets/icon/style.css',    
     // '~assets/font-icon/style.css',
-    '~assets/icon/style.css',
   ],
   /*
   ** Plugins to load before mounting the App

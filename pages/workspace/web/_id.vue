@@ -23,6 +23,7 @@ import header__ from '@/components/web/header.vue'
 import nav_left__ from '@/components/web/nav-left/container.vue'
 import workspace__ from '@/components/web/workspace.vue'
 import nav_right__ from '@/components/web/nav-right/nav-right.vue'
+import '@/assets/font-icon/style.css'
 export default {
     components: {
         "nav-left": nav_left__,
