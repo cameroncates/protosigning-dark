@@ -17,14 +17,14 @@
             </thead>
             <tbody>
             <tr v-for="(item, i) in projects.web" :key="i" class="hov-elem">
-                <td style="min-width:200px" class="text-small">
-                    <p contenteditable="true" class="mb-1 font-weight-bold">{{item.title}}</p>
+                <td style="min-width:200px" class="text-small" v-if="item.show">
+                    <p contenteditable="true" class="mb-1 font-weight-bold" v-html="item.title"></p>
                         <p class="text-sm" v-if="item.collaborators"><strong>Collaborators:</strong>
                             <span class="text-primary" v-for="(sub_item, j) in item.collaborators" :key="j">{{sub_item.uid}} . </span>
                         </p>
                     </td>
-                <td class="text-primary text-sm">{{item.created}}</td>
-                <td class="scale-0 hov-tg text-right">
+                <td class="text-primary text-sm" v-if="item.show">{{item.created}}</td>
+                <td class="scale-0 hov-tg text-right" v-if="item.show">
                     <button @click="project_opt('delete_web', i)"  class="btn material-icons">delete</button>
                     <button @click="project_opt('open_web', item)" class="btn material-icons">open_in_new</button>
                 </td>
@@ -83,6 +83,16 @@ export default {
     components: {
         modal
     },
+    props: {
+        keywords: {
+            required: true
+        }
+    },
+    watch: {        
+        keywords(n, o) {
+            this.filter(n)
+        }
+    },
     data() {
         return {
             uid: null,
@@ -94,13 +104,36 @@ export default {
             },
             projects: {
                 web: null,
+                web_clone: null,
                 logo: null,
+                logo_clone: null,
                 type: null
             },
             show_model: false
         }
     },
     methods: {
+        filter(keywords) {
+            keywords = keywords.trim()
+            
+            for(let key in this.projects.web) {
+                let title = this.projects.web[key].title
+                if(title.toLowerCase().includes(keywords.toLowerCase())) {
+                    this.projects.web[key].show = true
+                } else {
+                    this.projects.web[key].show = false
+                }
+            }
+            for(let key in this.projects.logo) {
+                let title = this.projects.logo[key].title
+                if(title.toLowerCase().includes(keywords.toLowerCase())) {
+                    this.projects.logo[key].show = true
+                } else {
+                    this.projects.logo[key].show = false
+                }
+            }
+
+        },
         show_model_func(type) {
             this.projects.type = type; 
             this.show_model=true; 
@@ -180,6 +213,9 @@ export default {
         this.api_fetch('projects/'+this.uid, (payload) => {
             if(payload) {
                 this.projects.logo = payload
+                for(let key in this.projects.logo) {
+                    this.projects.logo[key] = { ...this.projects.logo[key], key, show: true }
+                }
             } else {
                 this.loading.logo = false
             }
@@ -188,7 +224,7 @@ export default {
             if(payload) {
                 this.projects.web = payload
                 for(let key in this.projects.web) {
-                    this.projects.web[key] = { ...this.projects.web[key], key }
+                    this.projects.web[key] = { ...this.projects.web[key], key, show: true }
                     if(this.projects.web[key].collaborators) {
                         let project_collaborators = this.projects.web[key].collaborators
                         for(let nested_key in project_collaborators) {

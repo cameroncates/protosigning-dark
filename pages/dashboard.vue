@@ -1,8 +1,8 @@
 <template>
 <div class="container-fluid p-0">
     <dashboard-header @switchTab="switch_tab" />
-    <dashboard-search @search="search_keywords"/>
-    <dashboard-mywork  v-if="tab==0" />
+    <dashboard-search @search="search_keywords" @keywords="keyupwords" />
+    <dashboard-mywork  v-if="tab==0" :keywords="keyupwords_" />
     <dashboard-logomaker  v-if="tab==1" :keywords="keywords" />
     <dashboard-elements  v-if="tab==2"  />
     <dashboard-shared  v-if="tab==3"  />
@@ -39,10 +39,14 @@ export default {
     data() {
         return {
             tab: 0,
-            keywords: "bold"
+            keywords: "bold",
+            keyupwords_: ""
         }
     },
     methods: {
+        keyupwords(keywords) {
+            this.keyupwords_ = keywords
+        },
         search_keywords(keywords) {
             this.keywords = keywords
         },

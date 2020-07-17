@@ -46,6 +46,7 @@ export default class Drawing {
         console.log('go back')
     }
     mousedown(e) {
+        console.log(e.target, 'target.')
         let parent = $parent(e.target, 'svg')
         if(parent) {
             this.ev.down = true

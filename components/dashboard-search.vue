@@ -7,7 +7,7 @@
             </p>
         </div>
         <div class="input-group w-50 m-auto bd-round mb-5 pb-4">
-            <input v-model="keywords" type="text" class="form-control bd-round p-4 box-shadow bg-light" style="border:transparent" placeholder="Search here...">
+            <input @keyup="$emit('keywords', keywords)" v-model="keywords" type="text" class="form-control bd-round p-4 box-shadow bg-light" style="border:transparent" placeholder="Search here...">
             <div class="input-group-append ml-2">
                 <button @click="search()" class="input-group-text bd-round material-icons btn bg-primary text-white">search</button>
             </div>

@@ -3,17 +3,15 @@
     <div class="header-parent">
       <div class="workspace-sec1 display-flex space-between">
         <div class="display-flex align-self-center">
-          <button><span class="icon-template"></span></button>
           <p class="font-20" contenteditable="true">{{project_title}}</p>
         </div>
         <div class="display-flex">
-          <button class="btn"><span class="icon-undo p-0" style="font-size:15px;"></span></button>
-          <button class="btn"><span class="icon-redo p-0" style="font-size:15px;"></span></button>
+          <!-- <button class="btn"><span class="icon-undo p-0" style="font-size:15px;"></span></button> -->
+          <!-- <button class="btn"><span class="icon-redo p-0" style="font-size:15px;"></span></button> -->
           <button @click="preview()" class="btn hover-effect"><span class="icon-mobile-devices"></span></button>
           <button class="btn btn-light ml-3"> Save</button>
           <button @click="export_func($event, export_)" class="dropdown-btn btn btn-light ml-1"> Export &nbsp;&#9207;</button>
           <button class="btn btn-primary ml-3 pl-4 pr-4" @click="visible=true">Share</button>
-          <button><span class="icon-profile-pic"></span></button>
         </div>
       </div>
     </div>

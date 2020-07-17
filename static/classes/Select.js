@@ -38,8 +38,10 @@ export default class Select {
         this.init()
     }
     remove() {
-        this.group.remove()
-        this.group = null
+        if(this.group) {
+            this.group.remove()
+            this.group = null    
+        }
     }
     init() {
         this.group = this.canvas.group()
@@ -158,6 +160,7 @@ export default class Select {
         }
     }
     mousedown(e) {
+        if($(e.target).attr("id") == "canvas-bg") return
         let parent = $parent(e.target, 'svg')
 
         this.point.down.x = e.offsetX
@@ -185,13 +188,15 @@ export default class Select {
 
             // console.log(this.node.transform("translateX"), this.point.translate, 'transformation')
             this.select(this.node.node)
+        } else {
+            this.remove()
         }
     }
     mousemove(e) {
         this.point.move.x = e.offsetX - this.point.down.x
         this.point.move.y = e.offsetY - this.point.down.y
 
-        if(this.ev.down && this.node) {
+        if(this.ev.down && this.node && this.type == "select") {
             this.transform(e)
         }
     }

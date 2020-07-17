@@ -5,7 +5,7 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Protosigning - Design anything',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -15,15 +15,14 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { href:"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel: "stylesheet"},
       { href:"https://unpkg.com/aos@next/dist/aos.css", rel: "stylesheet"},
-      { href:"https://fonts.googleapis.com/icon?family=Material+Icons", rel: "stylesheet"},
       { href: "http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css", rel: "stylesheet"},
       { href: 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel: "stylesheet"},
-      { href:"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel: "stylesheet"},
-      { href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css", rel: "stylesheet"},
-      { href:"https://fonts.googleapis.com/icon?family=Material+Icons", rel: "stylesheet"},
+      // { href:"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel: "stylesheet"},
+      // { href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css", rel: "stylesheet"},
       { src: "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"},
       { src: "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"},
       { src: "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"},
+      { href:"https://fonts.googleapis.com/icon?family=Material+Icons", rel: "stylesheet"},
 
     ],
     script: [
@@ -63,8 +62,8 @@ export default {
     '~assets/css/bootstrap-ext.css',
     '~assets/bootstrap-ext.css',
     '~assets/css/animate-css.css',
+    // '~assets/font-icon/style.css',
     '~assets/icon/style.css',
-    '~assets/font-icon/style.css'
   ],
   /*
   ** Plugins to load before mounting the App
