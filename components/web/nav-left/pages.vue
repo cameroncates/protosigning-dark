@@ -197,12 +197,11 @@ export default {
             this.ref = "projects/web/"+this.uid+"/"+this.project_id
             this.api_fetch(this.ref, (payload) => {
                 if(payload) {
+                    this.pages = []
+                    console.log('hello')
                     for(let key in payload.pages) {
                         this.pages.push(payload.pages[key])
                     }
-                    console.log(this.pages)
-                    console.log(this.pages, 'my pages')
-                    // console.log(this.pages, this.active, 'active.')
                     this.active = this.getCookie("proto-page")
                     if(this.pages[this.active]) {
                         this.pages[this.active].workspace = this.workspace.html()

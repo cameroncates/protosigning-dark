@@ -221,7 +221,6 @@ export default {
         this.socket.on("workspace", data => {
             $("#test1234").html("Workspace Updated")
             data !== 0 ? this.workspace.html(data) : this.workspace.append('<p component="true" class="col-md-12 text-center">initial data is empty</p>')
-            console.log('workspace is updated...', data)
         })
 
 
@@ -246,8 +245,8 @@ export default {
                         title: pages[active.i].title || "Blank",
                         raw: this.workspace.html()
                     }
-                db.ref("projects/web/"+this.uid+"/"+this.key+"/pages/"+active.fb).set(db_data)
-                .then((e) => this.$store.dispatch("website-state/update_page", {nodes, raw: this.workspace.html()}) )    
+                // db.ref("projects/web/"+this.uid+"/"+this.key+"/pages/"+active.fb).set(db_data)
+                // .then((e) => this.$store.dispatch("website-state/update_page", {nodes, raw: this.workspace.html()}) )    
 
 
                 // socket.io
