@@ -24,7 +24,10 @@ export default {
             required: true
         },
         pages: {
-            required: true
+            required: false
+        },
+        reference: {
+            required: false
         }
     },
     data() {
@@ -46,8 +49,11 @@ export default {
     },
     methods: {
         link_it() {
-            let component = this.getComponent(link_overlay, { e: this.e, pages: this.pages })
-            $(document.body).append(component)
+            let { html, instance } = this.getComponent(link_overlay, { e: this.e, pages: this.pages, reference: this.reference })
+            instance.$on("link", payload => {
+                this.$emit("link-it", payload)
+            })
+            $(document.body).append(html)
         },
         wrap() {
             let target = $(this.e.target)
@@ -100,7 +106,10 @@ export default {
             let ComponentClass = vue.extend(component)
             let instance = new ComponentClass({ propsData: props })
             instance.$mount()
-            return instance.$el
+            return {
+                html: instance.$el,
+                instance
+            }
 
         },
     },

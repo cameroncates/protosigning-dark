@@ -74,7 +74,9 @@ export default {
             workspace: null,
             key: null,
             uuid: null,
-            project_id: null
+            project_id: null,
+            mypages: [],
+            ref: null
         }
     },
     methods: {       
@@ -83,6 +85,14 @@ export default {
             let instance = new ComponentClass({ propsData: props })
             instance.$mount()
             return instance.$el
+        },
+        getComponent2(component, props = null) {
+            let ComponentClass = vue.extend(component)
+            let instance = new ComponentClass({ propsData: props })
+            instance.$mount()
+            return {
+                instance, html: instance.$el
+            }
         },
         
         insert_component({ component, target, container, props = null}) {
@@ -158,9 +168,11 @@ export default {
 
         if(this.project_id) {            
             let ref = "projects/web/"+this.uid+"/"+this.project_id
+            this.ref = ref
             this.api_fetch(ref, (payload) => {
                 this.loading.msg = "Almost there"
                 if(payload) {
+                    this.mypages = payload.pages
                     let active = this.getCookie("proto-page")
                     if(active && payload.pages[active]) {
                         this.workspace.html(payload.pages[active].workspace)
@@ -270,9 +282,14 @@ export default {
 
                 if(target.is('button') || (target.is("a") && target.attr("type") === "button")) {
                     let pages = this.$store.state['website-state']['WORKSPACE']['pages']
-                    let instance = this.getComponent(button_customizations, {e, pages})
+                    let { instance, html } = this.getComponent2(button_customizations, {e, reference: this.ref })
+                    instance.$on("link-it", payload => {
+                        if(target.attr("href")) {
+                            target.attr("href2", payload)
+                        }
+                    })
                     let text_edit_instance = this.getComponent(text_edit_customizations, {e})
-                    this.appendCustomizations(instance)
+                    this.appendCustomizations(html)
                     this.appendCustomizations(text_edit_instance)
                 }
                 else if(target.attr('container-type') === "inner-container") {
