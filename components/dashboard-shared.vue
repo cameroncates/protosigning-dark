@@ -2,11 +2,12 @@
 <div class="container">
   <h5 class="mt-5 mb-5">Shared With me</h5>
   <div class="list-group" v-if="projects.length > 0">
-      <a @click="open(item)" v-for="(item, i) in projects" class="list-group-item list-group-item-action font-weight-bold" :key="i">
-          <span>{{item.title.toUpperCase()}}</span> <br>
-          <span class="text-sm font-weight-normal text-primary">{{item.created}}</span>
-
-      </a>
+      <div @click="open(item)" v-for="(item, i) in projects" :key="i">
+        <a class="list-group-item list-group-item-action font-weight-bold" v-if="item.title">
+                <span>{{item.title}}</span> <br>
+                <span class="text-sm font-weight-normal text-primary">{{item.created}}</span>
+        </a>
+      </div>
   </div>
 </div>
 
@@ -39,7 +40,6 @@ export default {
                             this.projects.push({...data.val(), key: data.key, owner: c.owner})
                         })
                     }
-                    console.log(this.projects, 'projects.')
                 }
             })
 

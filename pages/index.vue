@@ -22,12 +22,6 @@
           are working on it everyday to make our valuable users happy and continue their
           buisnesses.
         </p>
-        <div class="w-100 text-center mt-4 pt-5 mb-5 pb-5 input-group">
-          <input type="text" class="form-control bg-light-2 box-shadow p-4 mr-3 bd-round bd-0 " placeholder="Search for templates or designs or logos">
-          <div class="input-group-append">
-            <button class="btn btn-primary font-weight-bold pl-3 pr-3 bd-round" type="submit">Category &#9207;</button>
-          </div>
-        </div>
         <!-- <div class="col-md-12 text-center pt-5">
           <button class="btn"><span class="material-icons">keyboard_arrow_down</span></button>
         </div> -->
@@ -38,11 +32,10 @@
     <!-- CONTENT-1 -->
     <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class="ls-2 mb-3">Extracting Logo From Image</h4>
-        <p class="ls-1">With our powerfull algorithms, you can now extract a logo from an image, extracting a logo from image means
+        <h1 class="ls-2 mb-3">Extracting Logo From Image</h1>
+        <h4 class="font-weight-normal ls-1">With our powerfull algorithms, you can now extract a logo from an image, extracting a logo from image means
           that you can generate the source file (SVG) of that logo. After that you can do many changes to it like changing their colors, paths, points all sorts of stuff.
-        </p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
+        </h4>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.computer" width="500px" alt="" data-aos="fade-left">
@@ -56,10 +49,9 @@
         <img :src="svg.web" width="500px" alt="" data-aos="fade-right">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class=" ls-2 mb-3">Code Generation</h4>
-        <p class="ls-1">Not only you can create your web prototypes with drag and drop, you can also be able to get their front-end code in <strong>.html</strong>,
-        <strong>.css</strong> and <strong>.js</strong> formats.</p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start here</span> <span class="material-icons">arrow_forward</span></button>
+        <h1 class=" ls-2 mb-3">Code Generation</h1>
+        <h2 class="font-weight-normal ls-1">Not only you can create your web prototypes with drag and drop, you can also be able to get their front-end code in <strong>.html</strong>,
+        <strong>.css</strong> formats.</h2>
       </div>
     </div>
     <!-- CONTENT-2 -->
@@ -67,11 +59,10 @@
     <!-- CONTENT-3 -->
     <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class=" ls-2 mb-3">Responsive Designs</h4>
-        <p class="ls-1">You can create your prototypes in a responsive way, which will help you to be able to see, how your prototype desing looks
+        <h1 class=" ls-2 mb-3">Responsive Designs</h1>
+        <h2 class="font-weight-normal ls-1">You can create your prototypes in a responsive way, which will help you to be able to see, how your prototype desing looks
           on different devices such as <strong>Desktop, PC, Tablets and Phones</strong>
-        </p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start now, it's free</span> <span class="material-icons">arrow_forward</span></button>
+        </h2>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.responsive_design" width="500px" alt="" data-aos="fade-left">
@@ -85,11 +76,10 @@
         <img :src="svg.list" width="500px" alt="">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class=" ls-2 mb-3">Create Logo By giving a set of details</h4>
-        <p class="ls-1">Not only you can create your own logo from scratch, but you can use our artifical neural network to create a unique by providing some
+        <h1 class=" ls-2 mb-3">Create Logo By giving a set of details</h1>
+        <h2 class="font-weight-normal ls-1">Not only you can create your own logo from scratch, but you can use our artifical neural network to create a unique by providing some
           set of information such as <strong>logo name, color combinations, field etc.</strong> and on the basis of this info, our system will generate a unique logo for you.
-          The results will shock you, try it!</p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Try it, it's free</span> <span class="material-icons">arrow_forward</span></button>
+          The results will shock you, try it!</h2>
       </div>
     </div>
     <!-- CONTENET-4 -->
@@ -97,9 +87,8 @@
     <!-- CONTENT-5 -->
     <div class="row mt-1 pl-5 pr-5 justify-content-around bg-light-2" :style="{height: heights.window + 'px'}">
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class=" ls-2 mb-3">Our SVG tool</h4>
-        <p class="ls-1">Use our powerful SVG tool to create beautiful and unique designs and logos and export them into the source file</p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Let's Go</span> <span class="material-icons">arrow_forward</span></button>
+        <h1 class=" ls-2 mb-3">Our SVG tool</h1>
+        <h2 class="font-weight-normal ls-1">Use our powerful SVG tool to create beautiful and unique designs and logos and export them into the source file</h2>
       </div>
       <div class="col-md-5  overflow-hidden text-center align-self-center">
         <img :src="svg.tools" width="500px" alt="" data-aos="fade-left">
@@ -113,11 +102,10 @@
         <img :src="svg.business" width="500px" alt="" data-aos="fade-right">
       </div>
       <div class="col-md-4  align-self-center" data-aos="fade-up">
-        <h4 class=" ls-2 mb-3">Team Collaboration - Share your projects with your colleagues</h4>
-        <p class="ls-1">With team Collaboration, you can be able to share you projects with colleagues, and can also edit their priviledges such as only viewing as well as 
+        <h1 class=" ls-2 mb-3">Team Collaboration - Share your projects with your colleagues</h1>
+        <h2 class="font-weight-normal ls-1">With team Collaboration, you can be able to share you projects with colleagues, and can also edit their priviledges such as only viewing as well as 
           viewing and editing. You can speed up your workflow with team Collaboration and done your project with a very fast rate.
-        </p>
-        <button class="btn btn-primary p-3 mt-5 d-flex bd-round"><span class="font-weight-bold mr-2">Start Collaborating</span> <span class="material-icons">arrow_forward</span></button>
+        </h2>
       </div>
     </div>
     <!-- CONTENT-6 -->
